@@ -1,5 +1,5 @@
 /* ====================================================
-   🔥 GAMIFY LIFE - LUXURY LOL CLIENT THEME
+   🔥 GAMIFY LIFE - LUXURY LOL CLIENT THEME 
    (Deep Navy & Teal Gradient, Gold/Cyan Accents)
    ==================================================== */
 
@@ -10,7 +10,8 @@ body {
     background: #0a0e1a; /* Dark Navy base */
     color: #e0e0e0;
     min-height: 100vh;
-    padding-top: 20px;
+    margin: 0;
+    padding: 20px;
 }
 
 h1, h2, h3, .radar-title, .quest-category-title, .badges-title {
@@ -23,74 +24,107 @@ h1, h2, h3, .radar-title, .quest-category-title, .badges-title {
 }
 
 /* ===== TABS NAVIGATION ===== */
-.dashboard-layout { display: block; max-width: 900px; margin: 0 auto; width: 100%; }
+.dashboard-layout { display: block !important; max-width: 800px; margin: 0 auto; width: 100%; }
 
 .app-nav {
-    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
-    margin: 0 auto 2rem auto; max-width: 900px;
+    display: flex; gap: 8px; justify-content: center;
+    margin: 0 auto 1.5rem auto; max-width: 800px;
+    background: #12182a; padding: 8px; border-radius: 12px;
+    border: 1px solid rgba(200, 170, 110, 0.15);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
 
 .nav-btn {
-    background: rgba(200, 170, 110, 0.08);
-    border: 1px solid rgba(200, 170, 110, 0.25);
-    color: #c8aa6e;
-    padding: 10px 24px;
+    flex: 1;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #8b9cb5;
+    padding: 10px 0;
     border-radius: 8px;
     font-size: 14px; font-weight: 500;
     cursor: pointer; transition: all 0.3s ease;
-    font-family: 'Roboto', sans-serif;
     text-transform: uppercase; letter-spacing: 1px;
 }
 
 .nav-btn:hover, .nav-btn.active {
-    background: rgba(0, 212, 170, 0.15); /* Cyan hover/active */
-    border-color: #00d4aa;
+    background: rgba(0, 212, 170, 0.15); /* Cyan hover */
+    border-color: rgba(0, 212, 170, 0.3);
     color: #00d4aa;
     box-shadow: 0 0 15px rgba(0, 212, 170, 0.15);
 }
 
-.tab-content { display: none; animation: fadeInTab 0.4s ease; }
+/* Logic Tab */
+.tab-content { display: none; animation: fadeInTab 0.3s ease; }
 .tab-content.active { display: block; }
-@keyframes fadeInTab { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInTab { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ===== MAIN CONTAINERS (Thẻ Kính Navy) ===== */
-.quest-creation-card, .quest-board-card, #gamification-section, #radar-container {
-    background: #12182a;
+/* ===== 💡 MAIN CONTAINERS (Cái Gradient 5-Stop bạn thích nằm ở đây) ===== */
+.quest-creation-card, .quest-board-card, #gamification-section, #radar-container, #tab-profile > div:not(#stats-container) {
+    /* Áp dụng dải màu ma thuật từ Demo */
+    background: linear-gradient(135deg, #0a0e1a 0%, #1a2332 20%, #1e3a4a 50%, #2d4a5c 75%, #1a2f3a 100%);
     border-radius: 12px;
-    border: 1px solid rgba(200, 170, 110, 0.15);
+    border: 1px solid rgba(200, 170, 110, 0.3); /* Viền vàng */
     padding: 24px; margin-bottom: 24px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 0 40px rgba(0, 168, 150, 0.05), 0 15px 40px rgba(0, 0, 0, 0.6);
     position: relative; overflow: hidden;
 }
 
-/* Hiệu ứng ánh sáng nền Teal mờ lót dưới thẻ */
-.quest-board-card::before, #radar-container::before {
-    content: ''; position: absolute; top: -50%; right: -20%; width: 300px; height: 300px;
-    background: radial-gradient(circle, rgba(0, 212, 170, 0.05) 0%, transparent 70%);
+/* Ánh sáng hắt dưới thẻ */
+.quest-creation-card::after, .quest-board-card::after {
+    content: ''; position: absolute; bottom: -30%; left: -10%; width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(45, 74, 92, 0.3) 0%, transparent 70%);
     border-radius: 50%; pointer-events: none;
 }
 
+/* ===== VÒNG TRÒN CHỈ SỐ (Đã được phục hồi) ===== */
+#stats-container {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 1.5rem 5%; width: 100%; max-width: 360px; margin: 0 auto 2rem auto;
+}
+
+.stat-card.circular-card {
+    position: relative; width: 28%; aspect-ratio: 1/1; height: auto;
+    border-radius: 50%;
+    background: conic-gradient(var(--stat-color) var(--progress), #1a2332 0deg); /* Vòng tiến trình */
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6); flex: 0 0 auto;
+}
+
+.stat-card.circular-card:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 0 20px var(--stat-color);
+}
+
+.stat-inner {
+    width: 86%; aspect-ratio: 1/1; height: auto;
+    background: #0a0e1a; /* Lõi màu Navy */
+    border-radius: 50%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    border: 1px solid rgba(200, 170, 110, 0.15);
+}
+
+.stat-card.circular-card .stat-icon { font-size: 1.4rem; margin-bottom: 2px; }
+.stat-card.circular-card .stat-label-small { color: #8b9cb5; font-size: 0.7rem; text-transform: uppercase; font-weight: 500; margin: 2px 0; }
+.stat-card.circular-card .stat-value { color: var(--stat-color); font-weight: 700; font-size: 0.85rem; text-shadow: 0 0 5px var(--stat-color); }
+.stat-mult { color: #c8aa6e; font-weight: 700; font-size: 0.85em; text-shadow: 0 0 8px rgba(200, 170, 110, 0.5); margin-left: 2px; }
+
 /* ===== INPUTS & FORMS ===== */
 input, select {
-    background: #0d1117;
+    background: rgba(10, 14, 26, 0.8);
     border: 1px solid rgba(200, 170, 110, 0.2);
-    color: #e0e0e0;
-    padding: 12px 16px;
-    border-radius: 8px;
+    color: #e0e0e0; padding: 12px 16px; border-radius: 8px;
     font-size: 14px; font-family: 'Roboto', sans-serif;
-    outline: none; transition: all 0.3s ease;
-    width: 100%; box-sizing: border-box;
+    outline: none; transition: all 0.3s ease; width: 100%; box-sizing: border-box;
 }
 input:focus, select:focus {
-    border-color: #c8aa6e; background: #12182a;
-    box-shadow: 0 0 15px rgba(200, 170, 110, 0.15);
+    border-color: #c8aa6e; background: #12182a; box-shadow: 0 0 15px rgba(200, 170, 110, 0.15);
 }
-input::placeholder { color: #5a6a7a; }
 
-.quest-form-row, .shop-form-row { display: flex; gap: 12px; margin-bottom: 16px; margin-top: 10px; }
+.quest-form-row, .shop-form-row { display: flex; gap: 12px; margin-bottom: 16px; margin-top: 10px; flex-wrap: wrap;}
+.quest-form-row select { flex: 1; }
 
-/* Nút Toggle (Tròn tròn như Badge) */
-.stat-toggles-label { font-size: 13px; color: #8b7e6a; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+.stat-toggles-label { font-size: 13px; color: #8b7e6a; margin-bottom: 8px; font-weight: 500; text-transform: uppercase;}
 .stat-toggles { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;}
 .stat-toggle {
     background: rgba(200, 170, 110, 0.05); border: 1px solid rgba(200, 170, 110, 0.2);
@@ -103,112 +137,112 @@ input::placeholder { color: #5a6a7a; }
     box-shadow: 0 0 12px rgba(0, 212, 170, 0.2);
 }
 
-/* ===== BUTTONS (Chuẩn nút Copy btn) ===== */
-.btn-create-quest, .btn-buy-item {
+.btn-create-quest {
     background: rgba(0, 212, 170, 0.15); border: 1px solid rgba(0, 212, 170, 0.3);
     color: #00d4aa; padding: 14px 24px; border-radius: 8px;
-    font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;
-    text-transform: uppercase; letter-spacing: 1px; width: 100%;
+    font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s ease;
+    text-transform: uppercase; letter-spacing: 1px; width: 100%; font-family: inherit;
 }
-.btn-create-quest:hover, .btn-buy-item:hover {
+.btn-create-quest:hover {
     background: rgba(0, 212, 170, 0.25); box-shadow: 0 0 20px rgba(0, 212, 170, 0.2); color: #fff;
 }
 
-/* ===== DANH SÁCH NHIỆM VỤ & SHOP ITEMS ===== */
+/* ===== QUEST LIST & SHOP LIST ===== */
 #quest-list, #shop-list { list-style: none; padding: 0; margin: 0; }
 
 .quest-card {
-    background: #0d1117;
-    border-radius: 10px; padding: 16px; margin-bottom: 12px;
-    border: 1px solid rgba(200, 170, 110, 0.15);
+    background: #12182a; border-radius: 10px; padding: 16px; margin-bottom: 12px;
+    border: 1px solid rgba(200, 170, 110, 0.15); border-left: 4px solid #00d4aa;
     display: flex; flex-direction: column; gap: 12px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    border-left: 4px solid #00d4aa; /* Viền trái Cyan */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .quest-card:hover {
-    transform: translateY(-4px); border-color: rgba(0, 212, 170, 0.4);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 212, 170, 0.1);
+    transform: translateY(-3px); border-color: rgba(0, 212, 170, 0.4);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
-.quest-card.done {
-    opacity: 0.5; border-left-color: #5a6a7a; border-color: rgba(255,255,255,0.05);
-}
+.quest-card.done { opacity: 0.5; border-left-color: #5a6a7a; text-decoration: line-through; }
 
 .quest-header { display: flex; justify-content: space-between; align-items: center; }
-.quest-title { font-size: 16px; font-weight: 700; color: #f0e6d2; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+.quest-title { font-size: 16px; font-weight: 700; color: #f0e6d2; }
 .quest-reward { font-size: 14px; color: #00d4aa; font-weight: 500; }
 
-/* Small Badges inside card */
 .quest-meta { display: flex; gap: 8px; flex-wrap: wrap; }
-.quest-stat-badge, .quest-difficulty-badge, .quest-type-badge {
-    padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase;
-}
-.quest-stat-badge { background: rgba(200, 170, 110, 0.1); color: #c8aa6e; border: 1px solid rgba(200, 170, 110, 0.2); }
-.quest-difficulty-badge.easy { background: rgba(0, 212, 170, 0.1); color: #00d4aa; border: 1px solid rgba(0, 212, 170, 0.3); }
-.quest-difficulty-badge.medium { background: rgba(200, 170, 110, 0.1); color: #c8aa6e; border: 1px solid rgba(200, 170, 110, 0.3); }
-.quest-difficulty-badge.hard { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+.quest-stat-badge, .quest-difficulty-badge, .quest-type-badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.quest-stat-badge { background: rgba(200, 170, 110, 0.1); color: #c8aa6e; }
+.quest-difficulty-badge.easy { background: rgba(0, 212, 170, 0.1); color: #00d4aa; }
+.quest-difficulty-badge.medium { background: rgba(200, 170, 110, 0.1); color: #c8aa6e; }
+.quest-difficulty-badge.hard { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
 
-/* Small buttons */
 .quest-actions { display: flex; gap: 8px; }
-.quest-actions button {
+.quest-actions button, .btn-buy-item, .btn-delete-shop {
     padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; text-transform: uppercase;
     cursor: pointer; transition: all 0.3s ease; border: 1px solid; font-family: 'Roboto', sans-serif;
 }
-.btn-complete { background: rgba(0, 212, 170, 0.15); border-color: rgba(0, 212, 170, 0.3); color: #00d4aa; }
-.btn-complete:hover:not(:disabled) { background: rgba(0, 212, 170, 0.3); color: #fff; box-shadow: 0 0 12px rgba(0, 212, 170, 0.2); }
-.btn-complete:disabled { opacity: 0.5; border-color: #333; color: #666; cursor: not-allowed; }
+.btn-complete, .btn-buy-item { background: rgba(0, 212, 170, 0.15); border-color: rgba(0, 212, 170, 0.3); color: #00d4aa; }
+.btn-complete:hover:not(:disabled), .btn-buy-item:hover { background: rgba(0, 212, 170, 0.3); color: #fff; box-shadow: 0 0 12px rgba(0, 212, 170, 0.2); }
+.btn-complete:disabled { opacity: 0.5; border-color: #333; color: #666; }
 
 .btn-delete, .btn-delete-shop { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; }
 .btn-delete:hover, .btn-delete-shop:hover { background: rgba(239, 68, 68, 0.25); color: #fff; box-shadow: 0 0 12px rgba(239, 68, 68, 0.2); }
 
-.empty-state { text-align: center; color: #5a6a7a; padding: 2rem; font-style: italic; }
+.empty-state { text-align: center; color: #8b7e6a; padding: 2rem; font-style: italic; font-size: 14px;}
 
-/* ===== GAMIFICATION (Streak, Gold, Badges) ===== */
+/* ===== GAMIFICATION (Streak, Title, Gold) ===== */
+#gamification-section { display: grid; gap: 12px; }
 #streak-display, #title-display {
-    background: #0d1117; padding: 12px; border-radius: 8px; text-align: center;
-    border: 1px solid rgba(200, 170, 110, 0.15); font-weight: 500; font-size: 14px;
+    background: #12182a; padding: 16px; border-radius: 8px; text-align: center;
+    border: 1px solid rgba(200, 170, 110, 0.15); font-weight: 500; font-size: 14px; color: #8b9cb5;
 }
-#streak-value { color: #ef4444; font-weight: 700; text-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
-#user-title { color: #00d4aa; font-weight: 700; text-shadow: 0 0 10px rgba(0, 212, 170, 0.3); }
+#streak-value { color: #ef4444; font-weight: 700; font-size: 16px; text-shadow: 0 0 10px rgba(239, 68, 68, 0.3); }
+#user-title { color: #00d4aa; font-weight: 700; font-size: 16px; text-shadow: 0 0 10px rgba(0, 212, 170, 0.3); }
 #gold-display { color: #00d4aa; text-shadow: 0 0 15px rgba(0, 212, 170, 0.4); font-size: 24px; }
 
-#badges-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
+#badges-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 12px; }
 .badge-card {
-    background: #0d1117; border: 1px solid rgba(200, 170, 110, 0.15); border-radius: 10px;
-    padding: 12px 8px; text-align: center; transition: all 0.3s ease;
+    background: #12182a; border: 1px solid rgba(200, 170, 110, 0.15); border-radius: 10px;
+    padding: 12px 8px; text-align: center; transition: all 0.3s;
 }
 .badge-card.unlocked { border-color: rgba(0, 212, 170, 0.4); box-shadow: inset 0 0 15px rgba(0, 212, 170, 0.1); }
 .badge-icon { font-size: 24px; margin-bottom: 6px; display: block; }
-.badge-name { font-size: 12px; color: #a0b8c8; font-weight: 500; }
-.badge-card.locked .badge-icon { filter: grayscale(1); opacity: 0.3; }
+.badge-name { font-size: 11px; color: #a0b8c8; font-weight: 500; }
+.badge-card.locked .badge-icon { filter: grayscale(1); opacity: 0.2; }
 
-/* ===== 5-STOP GRADIENT LEVEL UP MODAL ===== */
+/* ===== RADAR CHART ===== */
+#radar-container { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#radar-container svg { width: 100%; max-width: 260px; }
+#radar-container .radar-grid { stroke: rgba(200, 170, 110, 0.2); }
+#radar-container .radar-axis { stroke: rgba(200, 170, 110, 0.1); }
+#radar-container .radar-polygon { fill: #00d4aa; fill-opacity: 0.2; stroke: #00d4aa; stroke-width: 2; }
+#radar-container .radar-dot { fill: #12182a; stroke: #c8aa6e; stroke-width: 2; }
+#radar-container .radar-label tspan:first-child { font-size: 14px; fill: #f0e6d2; font-weight: 700; font-family: 'Roboto';}
+#radar-container .radar-label tspan:last-child { font-size: 10px; fill: #c8aa6e; font-weight: 500; }
+#alloc-points.highlight { color: #00d4aa; animation: pulse 1.5s infinite; font-weight: bold;}
+
+/* ===== LEVEL UP MODAL & TOAST ===== */
 #levelup-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000;
     background: rgba(10, 14, 26, 0.85); backdrop-filter: blur(5px);
     display: flex; justify-content: center; align-items: center;
     opacity: 0; visibility: hidden; transition: all 0.3s;
 }
 #levelup-overlay.active { opacity: 1; visibility: visible; }
 .levelup-modal {
-    /* Áp dụng chuẩn Gradient 5 stops */
     background: linear-gradient(135deg, #0a0e1a 0%, #1a2332 20%, #1e3a4a 50%, #2d4a5c 75%, #1a2f3a 100%);
     padding: 40px; border-radius: 16px; text-align: center;
     border: 1px solid rgba(0, 212, 170, 0.4);
     box-shadow: 0 0 40px rgba(0, 212, 170, 0.2), 0 20px 60px rgba(0, 0, 0, 0.5);
-    max-width: 400px; width: 90%; animation: floatModal 3s ease-in-out infinite;
+    max-width: 380px; width: 90%; animation: floatModal 3s ease-in-out infinite;
 }
 @keyframes floatModal { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-.levelup-title { font-size: 36px; color: #00d4aa; text-shadow: 0 0 20px rgba(0, 212, 170, 0.5); margin-bottom: 10px; }
-.levelup-level { font-size: 24px; color: #f0e6d2; margin-bottom: 5px; }
-.levelup-title-text { font-size: 16px; color: #c8aa6e; margin-bottom: 24px; }
+.levelup-title { font-size: 32px; color: #00d4aa; text-shadow: 0 0 20px rgba(0, 212, 170, 0.5); margin-bottom: 10px; }
+.levelup-level { font-size: 20px; color: #f0e6d2; margin-bottom: 5px; font-weight: 700; }
+.levelup-title-text { font-size: 14px; color: #c8aa6e; margin-bottom: 24px; }
 #close-levelup {
     background: rgba(200, 170, 110, 0.15); border: 1px solid rgba(200, 170, 110, 0.4);
-    color: #c8aa6e; padding: 10px 30px; border-radius: 8px; font-weight: 600;
-    cursor: pointer; transition: all 0.3s; text-transform: uppercase;
+    color: #c8aa6e; padding: 10px 30px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;
 }
 #close-levelup:hover { background: #c8aa6e; color: #0a0e1a; }
 
-/* ===== TOAST NOTIFICATIONS ===== */
 #toast-container { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 12px; z-index: 9999; }
 .toast {
     background: #12182a; color: #e0e0e0; padding: 16px 20px; border-radius: 8px;
@@ -218,21 +252,14 @@ input::placeholder { color: #5a6a7a; }
 }
 .toast.streak, .toast.error { border-left-color: #ef4444; }
 .toast.levelup { border-left-color: #c8aa6e; background: #1a2332; }
-
-/* ===== RADAR CHART (Khớp màu Teal/Gold) ===== */
-#radar-container { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-#alloc-points.highlight { color: #00d4aa; animation: pulse 1.5s infinite; }
-#radar-container svg { width: 100%; max-width: 240px; }
-#radar-container .radar-grid { stroke: rgba(200, 170, 110, 0.2); }
-#radar-container .radar-axis { stroke: rgba(200, 170, 110, 0.15); }
-#radar-container .radar-polygon { fill: #00d4aa; fill-opacity: 0.2; stroke: #00d4aa; stroke-width: 2; }
-#radar-container .radar-dot { fill: #0a0e1a; stroke: #00d4aa; stroke-width: 2; }
-#radar-container .radar-label tspan:first-child { font-size: 16px; fill: #f0e6d2; font-weight: 700;}
-#radar-container .radar-label tspan:last-child { font-size: 11px; fill: #c8aa6e; font-weight: 500; }
+.toast.hide { animation: slideOut 0.3s ease-in forwards; }
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
 
 /* Hỗ trợ Responsive */
 @media (max-width: 768px) {
     .quest-form-row, .shop-form-row { flex-direction: column; }
+    .stat-card.circular-card { width: 42%; } /* Rộng hơn trên mobile */
     #toast-container { bottom: 16px; left: 16px; right: 16px; }
 }
 .hidden { display: none !important; }
