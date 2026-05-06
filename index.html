@@ -88,8 +88,21 @@
                 </div>
             </aside>
             
-            <!-- 🛒 TAB 4: CỬA HÀNG (MỚI) -->
+            <!-- 🛒 TAB 4: CỬA HÀNG (ĐÃ UPDATE FORM THÊM VẬT PHẨM) -->
             <section class="col-center tab-content" id="tab-shop">
+                <!-- 💡 THÊM FORM QUẢN LÝ SHOP -->
+                <div class="quest-creation-card" style="margin-bottom: 1.5rem;">
+                    <h2>➕ Thêm Phần Thưởng Mới</h2>
+                    <form id="shop-form-add">
+                        <div class="quest-form-row" style="margin-bottom: 10px;">
+                            <input type="text" id="new-item-name" placeholder="Tên phần thưởng (VD: Xem phim)..." required style="flex: 2;">
+                            <input type="number" id="new-item-price" placeholder="Giá (VD: 200)" required style="flex: 1;" min="1">
+                            <input type="text" id="new-item-icon" value="🎁" title="Emoji Icon" style="width: 60px; text-align: center;">
+                        </div>
+                        <button type="submit" class="btn-create-quest">🛒 Thêm Lên Kệ</button>
+                    </form>
+                </div>
+
                 <div class="quest-board-card">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                         <h2>🛒 Chợ Đen Phần Thưởng</h2>
@@ -103,7 +116,7 @@
                 </div>
             </section>
 
-            <!-- ⚙️ TAB 5: CÀI ĐẶT (MỚI) -->
+            <!-- ⚙️ TAB 5: CÀI ĐẶT -->
             <section class="col-center tab-content" id="tab-settings">
                 <div class="quest-creation-card">
                     <h2>⚙️ Quản lý Dữ liệu</h2>
@@ -140,6 +153,6 @@
     <script src="js/quest.js"></script>
     <script src="js/reward.js"></script>
     <script src="js/chart.js"></script> 
-    <script src="js/main.js?v=6"></script>
+    <script src="js/main.js?v=7"></script> <!-- Đổi Version để Clear Cache Trình Duyệt -->
 </body>
 </html>

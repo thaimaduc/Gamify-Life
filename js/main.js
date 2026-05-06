@@ -1,4 +1,4 @@
-/* main.js - Phase 6.0 (Economy System, Backup & Tabs) */
+/* main.js - Phase 7.0 (Dynamic Shop) */
 (function() {
     'use strict';
     
@@ -18,9 +18,20 @@
             levelupOverlay: document.getElementById('levelup-overlay'),
             allocPointsDisplay: document.getElementById('alloc-points'),
             radarContainer: document.getElementById('radar-container'),
-            goldDisplay: document.getElementById('gold-display') // 💡 MỚI
+            goldDisplay: document.getElementById('gold-display'),
+            shopList: document.getElementById('shop-list'),
+            shopFormAdd: document.getElementById('shop-form-add') // 💡 MỚI
         };
     }
+    
+    // ===== STAT MAP =====
+    var statMap = {
+        str: { icon: '⚔️', label: 'STR', color: '#ff6b6b' },
+        agi: { icon: '🪽', label: 'AGI', color: '#4ecdc4' },
+        int: { icon: '🧠', label: 'INT', color: '#45b7d1' },
+        vit: { icon: '❤️', label: 'VIT', color: '#f9ca24' },
+        lck: { icon: '🍀', label: 'LCK', color: '#a0d2eb' }
+    };
     
     // ===== RENDER BATCH =====
     function renderAllUI() {
@@ -35,39 +46,26 @@
             els.allocPointsDisplay.className = user.allocPoints > 0 ? 'highlight' : '';
         }
         
-        if (els.goldDisplay) {
-            els.goldDisplay.textContent = user.gold || 0;
-        }
+        if (els.goldDisplay) els.goldDisplay.textContent = user.gold || 0;
         
         UI.renderBadges(State.getBadges());
         renderQuestList();
-        renderShop(); // 💡 Render Shop
+        renderShop(); // 💡 Render Shop động
         
         if (els.streakValue) els.streakValue.textContent = State.getStreak();
         if (els.userTitle) els.userTitle.textContent = Reward.getTitleByLevel(user.characterLevel);
     }
     
-    // ===== STAT MAP =====
-    var statMap = {
-        str: { icon: '⚔️', label: 'STR', color: '#ff6b6b' },
-        agi: { icon: '🪽', label: 'AGI', color: '#4ecdc4' },
-        int: { icon: '🧠', label: 'INT', color: '#45b7d1' },
-        vit: { icon: '❤️', label: 'VIT', color: '#f9ca24' },
-        lck: { icon: '🍀', label: 'LCK', color: '#a0d2eb' }
-    };
-    
     // ===== INIT =====
     function init() {
-        console.log('🚀 App initializing (Phase 6.0: Economy & Backup)...');
+        console.log('🚀 App initializing (Phase 7.0: Dynamic Shop)...');
         cacheDOM();
         if (typeof State === 'undefined' || typeof UI === 'undefined') return;
         
         State.load();
         Quest.load();
         
-        if(typeof Quest.checkDailyResets === 'function') {
-            Quest.checkDailyResets(); 
-        }
+        if(typeof Quest.checkDailyResets === 'function') Quest.checkDailyResets(); 
         
         renderAllUI();
         setupEventListeners();
@@ -85,18 +83,14 @@
         
         var dailyQuests = quests.filter(function(q) { return q.type === 'daily'; });
         var adhocQuests = quests.filter(function(q) { return q.type !== 'daily'; });
-        
         var html = '';
         
         function renderGroup(title, groupQuests, icon) {
             if (groupQuests.length === 0) return '';
-            
             var groupHtml = '<div class="quest-category-title">' + icon + ' ' + title + '</div>';
-            
             for (var i = 0; i < groupQuests.length; i++) {
                 var q = groupQuests[i];
                 var reward = Quest.calcReward(q.difficulty);
-                
                 var statsArray = q.statTypes || [q.statType]; 
                 var statBadgesHtml = '';
                 for (var j = 0; j < statsArray.length; j++) {
@@ -105,12 +99,10 @@
                     statBadgesHtml += '<span class="quest-stat-badge" style="background:' + st.color + '20;color:' + st.color + '">' + 
                                       st.icon + ' ' + st.label + '</span>';
                 }
-                
                 groupHtml += '<li class="quest-card ' + (q.done ? 'done' : '') + '" data-id="' + q.id + '">' +
                     '<div class="quest-header">' +
                         '<span class="quest-title">' + escapeHtml(q.title) + '</span>' +
-                        '<div class="quest-meta">' + 
-                            statBadgesHtml +
+                        '<div class="quest-meta">' + statBadgesHtml +
                             '<span class="quest-difficulty-badge ' + q.difficulty + '">' + capitalize(q.difficulty) + '</span>' +
                         '</div>' +
                     '</div>' +
@@ -126,41 +118,64 @@
         
         html += renderGroup('Nhiệm vụ Hàng ngày', dailyQuests, '🔁');
         html += renderGroup('Nhiệm vụ 1 Lần', adhocQuests, '🎯');
-        
         els.questList.innerHTML = html;
     }
 
-    // ===== 💡 RENDER SHOP =====
-    var shopItems = [
-        { id: 1, name: '1 Giờ chơi Game/Giải trí', price: 500, icon: '🎮' },
-        { id: 2, name: 'Mua 1 ly Trà Sữa/Cà phê', price: 300, icon: '🧋' },
-        { id: 3, name: 'Lướt MXH vô tri 30p', price: 200, icon: '📱' },
-        { id: 4, name: 'Xem 1 tập Phim/Anime', price: 250, icon: '🎬' }
-    ];
-
+    // ===== 💡 RENDER SHOP ĐỘNG =====
     function renderShop() {
-        var shopList = document.getElementById('shop-list');
-        if (!shopList) return;
-        
+        if (!els.shopList) return;
+        var items = State.getShopItems();
         var html = '';
-        for (var i = 0; i < shopItems.length; i++) {
-            var item = shopItems[i];
+        
+        if (items.length === 0) {
+            html = '<li class="empty-state">🏪 Cửa hàng đang trống. Hãy thêm món mới ở phía trên!</li>';
+        }
+
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
             html += '<li class="quest-card" style="flex-direction: row; justify-content: space-between; align-items: center; border-left-color: #facc15;">' +
                         '<div style="display: flex; align-items: center; gap: 1rem;">' +
                             '<span style="font-size: 2rem;">' + item.icon + '</span>' +
-                            '<span style="font-weight: bold; font-size: 1rem; color: #eaeaea;">' + escapeHtml(item.name) + '</span>' +
+                            '<div>' +
+                                '<div style="font-weight: bold; font-size: 1rem; color: #eaeaea;">' + escapeHtml(item.name) + '</div>' +
+                                '<div style="font-size: 0.85rem; color: #facc15;">Giá: ' + item.price + ' 💰</div>' +
+                            '</div>' +
                         '</div>' +
-                        '<button class="btn-buy-item" data-price="' + item.price + '" data-name="' + escapeHtml(item.name) + '" ' +
-                            'style="background: #facc15; color: #1a1a2e; font-weight: bold; padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;">' +
-                            'Mua (-' + item.price + ' 💰)' +
-                        '</button>' +
+                        '<div style="display: flex; gap: 8px;">' +
+                            '<button class="btn-buy-item" data-price="' + item.price + '" data-name="' + escapeHtml(item.name) + '" ' +
+                                'style="background: #facc15; color: #1a1a2e; font-weight: bold; padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;">' +
+                                'Mua' +
+                            '</button>' +
+                            '<button class="btn-delete-shop" data-id="' + item.id + '" title="Xóa vật phẩm" ' +
+                                'style="background: rgba(255,255,255,0.05); color: #fff; padding: 0.5rem; border: none; border-radius: 6px; cursor: pointer; filter: grayscale(1);">🗑️</button>' +
+                        '</div>' +
                     '</li>';
         }
-        shopList.innerHTML = html;
+        els.shopList.innerHTML = html;
     }
     
     // ===== EVENT LISTENERS =====
     function setupEventListeners() {
+        
+        // 💡 Xử lý Submit Form Cửa Hàng
+        if (els.shopFormAdd) {
+            els.shopFormAdd.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var name = document.getElementById('new-item-name').value.trim();
+                var price = document.getElementById('new-item-price').value;
+                var icon = document.getElementById('new-item-icon').value;
+                
+                if (name && price) {
+                    State.addShopItem(name, price, icon);
+                    renderAllUI(); // Render lại mà không cần tải lại trang
+                    els.shopFormAdd.reset();
+                    document.getElementById('new-item-icon').value = '🎁';
+                    UI.showToast('✅ Đã thêm "' + name + '" vào chợ đen!', 'success');
+                }
+            });
+        }
+
+        // Xử lý Giao Nhiệm vụ
         if (els.questForm) {
             els.questForm.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -185,18 +200,16 @@
             });
         }
         
+        // Xử lý Click trên Bảng Nhiệm Vụ
         if (els.questList) {
             els.questList.addEventListener('click', function(e) {
                 var target = e.target;
                 var card = target.closest('.quest-card');
                 if (!card) return;
-                
                 var questId = parseInt(card.dataset.id);
                 if (isNaN(questId)) return;
                 
-                if (target.classList.contains('btn-complete')) {
-                    completeQuest(questId);
-                }
+                if (target.classList.contains('btn-complete')) completeQuest(questId);
                 if (target.classList.contains('btn-delete')) {
                     Quest.remove(questId);
                     renderAllUI();
@@ -205,6 +218,7 @@
             });
         }
         
+        // Đóng Level Up Modal
         if (els.closeLevelup && els.levelupOverlay) {
             els.closeLevelup.addEventListener('click', function() {
                 els.levelupOverlay.classList.remove('active');
@@ -212,22 +226,20 @@
             });
         }
         
+        // Tăng hệ số Stats
         var statsContainer = document.getElementById('stats-container');
         if (statsContainer) {
             statsContainer.addEventListener('click', function(e) {
                 var statCard = e.target.closest('.stat-card');
                 if (!statCard) return;
-                
                 var statName = statCard.id.replace('stat-', '');
                 var user = State.getUser();
-                
                 if (user.allocPoints > 0) {
                     var result = State.spendAllocPoint(statName);
                     if (result.success) {
                         renderAllUI();
                         UI.showToast(statMap[statName].label + ' đã tăng hệ số EXP lên x' + result.newMultiplier + '! 📈', 'success');
                     } else if (result.reason === 'max') {
-                        // 💡 Chặn đứng nếu đạt Max 3.0
                         UI.showToast('⚠️ Hệ số nhân đã đạt mức TỐI ĐA (x3.0)!', 'streak');
                     }
                 } else {
@@ -236,35 +248,30 @@
             });
         }
 
-        // ===== LOGIC CHUYỂN TABS =====
+        // Logic Chuyển Tabs
         var navBtns = document.querySelectorAll('.nav-btn');
         var tabContents = document.querySelectorAll('.tab-content');
-        
         if (navBtns.length > 0) {
             navBtns.forEach(function(btn) {
                 btn.addEventListener('click', function() {
                     navBtns.forEach(function(b) { b.classList.remove('active'); });
                     tabContents.forEach(function(t) { t.classList.remove('active'); });
-                    
                     this.classList.add('active');
-                    
                     var targetId = this.getAttribute('data-target');
                     var targetTab = document.getElementById(targetId);
-                    if (targetTab) {
-                        targetTab.classList.add('active');
-                    }
+                    if (targetTab) targetTab.classList.add('active');
                 });
             });
         }
 
-        // ===== 💡 LOGIC SHOP MUA HÀNG =====
-        var shopList = document.getElementById('shop-list');
-        if (shopList) {
-            shopList.addEventListener('click', function(e) {
-                if (e.target.classList.contains('btn-buy-item')) {
-                    var price = parseInt(e.target.getAttribute('data-price'));
-                    var name = e.target.getAttribute('data-name');
-                    
+        // 💡 Logic Mua & Xóa Item Trong Shop
+        if (els.shopList) {
+            els.shopList.addEventListener('click', function(e) {
+                var target = e.target;
+                
+                if (target.classList.contains('btn-buy-item')) {
+                    var price = parseInt(target.getAttribute('data-price'));
+                    var name = target.getAttribute('data-name');
                     if (State.spendGold(price)) {
                         renderAllUI();
                         UI.showToast('Đã mua: ' + name + ' (-' + price + ' 💰)', 'success');
@@ -272,10 +279,19 @@
                         UI.showToast('⚠️ Nghèo quá, đi làm Quest kiếm thêm Vàng đi!', 'streak');
                     }
                 }
+                
+                if (target.classList.contains('btn-delete-shop')) {
+                    var id = parseInt(target.getAttribute('data-id'));
+                    if (confirm('Bạn có chắc muốn xóa vật phẩm này khỏi cửa hàng không?')) {
+                        State.removeShopItem(id);
+                        renderAllUI(); // Refresh UI
+                        UI.showToast('🗑️ Đã xóa vật phẩm', 'success');
+                    }
+                }
             });
         }
 
-        // ===== 💡 LOGIC BACKUP DATA =====
+        // Logic Backup Data
         var btnExport = document.getElementById('btn-export');
         if (btnExport) {
             btnExport.addEventListener('click', function() {
@@ -323,17 +339,14 @@
         var statCount = statsArray.length;
         var expPerStat = Math.floor(reward.statBonusExp / statCount); 
         
-        // 💡 CỘNG VÀNG
         var goldEarned = reward.gold || 0;
         State.addGold(goldEarned);
         
         var leveledUpStats = [];
         var statToastDetails = [];
-        
         for (var i = 0; i < statCount; i++) {
             var sName = statsArray[i];
             var sRes = State.addStatExp(sName, expPerStat);
-            
             if (sRes.leveledUp) leveledUpStats.push(sName);
             statToastDetails.push(statMap[sName].label + ' +' + (sRes.addedExp || expPerStat));
         }
@@ -350,7 +363,6 @@
         if (charResult.leveledUp > 0) {
             var msg = charResult.leveledUp > 1 ? '🚀 Lên ' + charResult.leveledUp + ' cấp!' : '🎉 Level Up!';
             UI.showToast(msg + ' +' + charResult.newAllocPoints + ' điểm phân bổ', 'levelup');
-            
             if (charResult.leveledUp === 1) {
                 UI.showLevelUpAnimation(charResult.currentLevel, Reward.getTitleByLevel(charResult.currentLevel));
             }
@@ -367,7 +379,6 @@
             }
         }
         
-        // 💡 BÁO CÁO CÓ VÀNG BÊN TRONG
         UI.showToast('Hoàn thành! +' + reward.baseExp + ' EXP | +' + goldEarned + ' 💰', 'success');
     }
     

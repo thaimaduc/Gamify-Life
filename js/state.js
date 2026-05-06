@@ -1,4 +1,4 @@
-/* state.js - Phase 6.0 (New EXP System + Alloc Points + Economy & Backup) */
+/* state.js - Phase 7.0 (Dynamic Shop System) */
 var State = (function() {
     'use strict';
     
@@ -12,12 +12,12 @@ var State = (function() {
         ALLOC_POINT_PER_LEVEL: 1     // Điểm phân bổ khi lên cấp character
     };
     
-    // Default schema với hệ thống EXP mới & Tiền tệ
+    // Default schema với hệ thống EXP mới, Tiền tệ & Shop
     var DEFAULTS = { 
         totalExp: 0,
         characterLevel: 1,
         allocPoints: 0,
-        gold: 0,                     // 💡 THÊM: Tiền tệ Vàng
+        gold: 0,
         stats: {
             str: { level: 1, exp: 0, multiplier: 1.0 },
             agi: { level: 1, exp: 0, multiplier: 1.0 },
@@ -28,7 +28,14 @@ var State = (function() {
         streak: 0,
         lastActive: null,
         badges: [],
-        completedQuests: 0
+        completedQuests: 0,
+        // 💡 Khởi tạo Shop mặc định
+        shopItems: [
+            { id: 1, name: '1 Giờ chơi Game/Giải trí', price: 500, icon: '🎮' },
+            { id: 2, name: 'Mua 1 ly Trà Sữa/Cà phê', price: 300, icon: '🧋' },
+            { id: 3, name: 'Lướt MXH vô tri 30p', price: 200, icon: '📱' },
+            { id: 4, name: 'Xem 1 tập Phim/Anime', price: 250, icon: '🎬' }
+        ]
     };
     
     var user = {};
@@ -68,8 +75,9 @@ var State = (function() {
             if (saved.totalExp !== undefined) user.totalExp = saved.totalExp;
             if (saved.characterLevel !== undefined) user.characterLevel = saved.characterLevel;
             if (saved.allocPoints !== undefined) user.allocPoints = saved.allocPoints;
-            if (saved.gold !== undefined) user.gold = saved.gold; // 💡 Load Vàng
-
+            if (saved.gold !== undefined) user.gold = saved.gold;
+            
+            // Xử lý dữ liệu cũ chuyển đổi (nếu có)
             if (saved.xp !== undefined && saved.totalExp === undefined) {
                 user.totalExp = saved.xp;
                 user.characterLevel = _calculateLevelFromExp(saved.xp);
@@ -80,11 +88,7 @@ var State = (function() {
             var statKeys = ['str','agi','int','vit','lck'];
             for (var i = 0; i < statKeys.length; i++) {
                 var key = statKeys[i];
-                if (typeof saved[key] === 'number') {
-                    var oldVal = saved[key];
-                    user.stats[key].level = Math.min(oldVal, CONFIG.MAX_LEVEL);
-                    user.stats[key].exp = (oldVal - 1) * 80;
-                } else if (saved.stats && saved.stats[key]) {
+                if (saved.stats && saved.stats[key]) {
                     user.stats[key] = {
                         level: Math.min(saved.stats[key].level || 1, CONFIG.MAX_LEVEL),
                         exp: saved.stats[key].exp || 0,
@@ -97,6 +101,8 @@ var State = (function() {
             if (saved.lastActive !== undefined) user.lastActive = saved.lastActive;
             if (Array.isArray(saved.badges)) user.badges = saved.badges.slice();
             if (saved.completedQuests !== undefined) user.completedQuests = saved.completedQuests;
+            // 💡 Load Shop Items (Nếu chưa có thì dùng DEFAULTS)
+            if (Array.isArray(saved.shopItems)) user.shopItems = saved.shopItems.slice();
         }
         return user;
     }
@@ -114,25 +120,7 @@ var State = (function() {
     function save() { _markSave(); }
     
     function getUser() {
-        var copy = {
-            totalExp: user.totalExp,
-            characterLevel: user.characterLevel,
-            allocPoints: user.allocPoints,
-            gold: user.gold || 0, // 💡 Kèm Vàng vào User object
-            streak: user.streak,
-            lastActive: user.lastActive,
-            badges: user.badges.slice(),
-            completedQuests: user.completedQuests,
-            stats: {}
-        };
-        for (var key in user.stats) {
-            copy.stats[key] = {
-                level: user.stats[key].level,
-                exp: user.stats[key].exp,
-                multiplier: user.stats[key].multiplier || 1.0
-            };
-        }
-        return copy;
+        return JSON.parse(JSON.stringify(user));
     }
     
     function addTotalExp(amount) {
@@ -195,23 +183,18 @@ var State = (function() {
         if (validStats.indexOf(statName) === -1) return { success: false };
         
         var stat = user.stats[statName];
-        
-        // 💡 VÁ LỖI LẠM PHÁT: Giới hạn multiplier max = 3.0
         if ((stat.multiplier || 1.0) >= 3.0) {
             return { success: false, reason: 'max', current: stat.multiplier };
         }
         
         stat.multiplier = (stat.multiplier || 1.0) + 0.1;
-        
-        // Đảm bảo không bị lỗi dấu phẩy động (VD: 3.0000000004)
         stat.multiplier = Math.round(stat.multiplier * 10) / 10;
-        
         user.allocPoints -= 1;
         _markSave();
         return { success: true, newMultiplier: stat.multiplier.toFixed(1) };
     }
 
-    // ===== 💡 HỆ THỐNG KINH TẾ (VÀNG) =====
+    // ===== HỆ THỐNG KINH TẾ (VÀNG) =====
     function addGold(amount) {
         user.gold = (user.gold || 0) + amount;
         _markSave();
@@ -227,7 +210,31 @@ var State = (function() {
         return false;
     }
 
-    // ===== 💡 HỆ THỐNG BACKUP DỮ LIỆU =====
+    // ===== 💡 HỆ THỐNG SHOP ĐỘNG (MỚI) =====
+    function getShopItems() {
+        return user.shopItems || [];
+    }
+
+    function addShopItem(name, price, icon) {
+        var newItem = {
+            id: Date.now(), // Tạo ID ngẫu nhiên không đụng hàng
+            name: name,
+            price: parseInt(price) || 0,
+            icon: icon || '🎁'
+        };
+        if (!user.shopItems) user.shopItems = [];
+        user.shopItems.push(newItem);
+        _markSave();
+        return newItem;
+    }
+
+    function removeShopItem(id) {
+        if (!user.shopItems) return;
+        user.shopItems = user.shopItems.filter(function(item) { return item.id !== id; });
+        _markSave();
+    }
+
+    // ===== HỆ THỐNG BACKUP DỮ LIỆU =====
     function exportData() {
         return JSON.stringify(getUser());
     }
@@ -269,7 +276,9 @@ var State = (function() {
     return {
         load: load, save: save, getUser: getUser,
         addTotalExp: addTotalExp, addStatExp: addStatExp, spendAllocPoint: spendAllocPoint,
-        addGold: addGold, spendGold: spendGold, exportData: exportData, importData: importData, // 💡 EXPORT CÁC HÀM MỚI
+        addGold: addGold, spendGold: spendGold, 
+        getShopItems: getShopItems, addShopItem: addShopItem, removeShopItem: removeShopItem, // 💡 EXPORT SHOP API
+        exportData: exportData, importData: importData,
         getTotalExpThreshold: getTotalExpThreshold, getTotalExpProgress: getTotalExpProgress,
         getStatExpThreshold: getStatExpThreshold, getStatExpProgress: getStatExpProgress,
         getAllocPoints: getAllocPoints, getCharacterLevel: getCharacterLevel,
