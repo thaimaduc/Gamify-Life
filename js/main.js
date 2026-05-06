@@ -15,7 +15,7 @@
             closeLevelup: document.getElementById('close-levelup'),
             questForm: document.getElementById('quest-form'),
             questTitleInput: document.getElementById('quest-title'),
-            questDiffSelect: document.getElementById('quest-difficulty'),
+            questDiffSelect: document.getElementById('quest-difficulty'), // Đã xóa questStatSelect cũ
             toastContainer: document.getElementById('toast-container'),
             levelupOverlay: document.getElementById('levelup-overlay'),
             allocPointsDisplay: document.getElementById('alloc-points'),
@@ -70,51 +70,64 @@
         setupEventListeners();
     }
     
-    // ===== RENDER QUEST LIST =====
+    // ===== RENDER QUEST LIST (Phân nhóm thông minh) =====
     function renderQuestList() {
         if (!els.questList) return;
         var quests = Quest.getAll();
         
         if (quests.length === 0) {
-            els.questList.innerHTML = '<li class="empty-state">📭 Chưa có nhiệm vụ nào. Khởi tạo Quest đầu tiên nhé!</li>';
+            els.questList.innerHTML = '<li class="empty-state">📭 Bảng nhiệm vụ đang trống. Nhận việc đi nào!</li>';
             return;
         }
         
+        // 💡 Chia nhóm Task
+        var dailyQuests = quests.filter(function(q) { return q.type === 'daily'; });
+        var adhocQuests = quests.filter(function(q) { return q.type !== 'daily'; });
+        
         var html = '';
-        for (var i = 0; i < quests.length; i++) {
-            var q = quests[i];
-            var reward = Quest.calcReward(q.difficulty);
+        
+        // 💡 Hàm phụ để render từng nhóm Quest
+        function renderGroup(title, groupQuests, icon) {
+            if (groupQuests.length === 0) return '';
             
-            // 💡 Tạo Badge cho loại Task (Hàng ngày / 1 Lần)
-            var typeLabel = q.type === 'daily' ? 'Hàng ngày' : '1 Lần';
-            var typeBadge = '<span class="quest-type-badge ' + (q.type || 'adhoc') + '">' + typeLabel + '</span>';
+            var groupHtml = '<div class="quest-category-title">' + icon + ' ' + title + '</div>';
             
-            // 💡 Tạo Badge cho TẤT CẢ các Stats được chọn
-            var statsArray = q.statTypes || [q.statType]; // Fallback an toàn cho data cũ
-            var statBadgesHtml = '';
-            for (var j = 0; j < statsArray.length; j++) {
-                var stName = statsArray[j];
-                var st = statMap[stName] || { icon: '?', label: stName, color: '#aaa' };
-                statBadgesHtml += '<span class="quest-stat-badge" style="background:' + st.color + '20;color:' + st.color + '">' + 
-                                  st.icon + ' ' + st.label + '</span>';
-            }
-            
-            html += '<li class="quest-card ' + (q.done ? 'done' : '') + '" data-id="' + q.id + '">' +
-                '<div class="quest-header">' +
-                    '<span class="quest-title">' + escapeHtml(q.title) + '</span>' +
-                    '<div class="quest-meta">' +
-                        typeBadge +
-                        statBadgesHtml +
-                        '<span class="quest-difficulty-badge ' + q.difficulty + '">' + capitalize(q.difficulty) + '</span>' +
+            for (var i = 0; i < groupQuests.length; i++) {
+                var q = groupQuests[i];
+                var reward = Quest.calcReward(q.difficulty);
+                
+                // Lấy danh sách Stats đã chọn
+                var statsArray = q.statTypes || [q.statType]; 
+                var statBadgesHtml = '';
+                for (var j = 0; j < statsArray.length; j++) {
+                    var stName = statsArray[j];
+                    var st = statMap[stName] || { icon: '?', label: stName, color: '#aaa' };
+                    statBadgesHtml += '<span class="quest-stat-badge" style="background:' + st.color + '20;color:' + st.color + '">' + 
+                                      st.icon + ' ' + st.label + '</span>';
+                }
+                
+                groupHtml += '<li class="quest-card ' + (q.done ? 'done' : '') + '" data-id="' + q.id + '">' +
+                    '<div class="quest-header">' +
+                        '<span class="quest-title">' + escapeHtml(q.title) + '</span>' +
+                        '<div class="quest-meta">' + 
+                            statBadgesHtml +
+                            '<span class="quest-difficulty-badge ' + q.difficulty + '">' + capitalize(q.difficulty) + '</span>' +
+                        '</div>' +
                     '</div>' +
-                '</div>' +
-                '<div class="quest-reward">+' + reward.baseExp + ' EXP Tổng | Chia đều +' + reward.statBonusExp + ' Stat EXP</div>' +
-                '<div class="quest-actions">' +
-                    '<button class="btn-complete" data-id="' + q.id + '"' + (q.done ? ' disabled' : '') + '>✅ ' + (q.done ? 'Đã xong' : 'Hoàn thành') + '</button>' +
-                    '<button class="btn-delete" data-id="' + q.id + '">🗑️</button>' +
-                '</div>' +
-            '</li>';
+                    '<div class="quest-reward">+' + reward.baseExp + ' EXP Tổng | Chia đều +' + reward.statBonusExp + ' Stat EXP</div>' +
+                    '<div class="quest-actions">' +
+                        '<button class="btn-complete" data-id="' + q.id + '"' + (q.done ? ' disabled' : '') + '>✅ ' + (q.done ? 'Đã xong' : 'Hoàn thành') + '</button>' +
+                        '<button class="btn-delete" data-id="' + q.id + '">🗑️</button>' +
+                    '</div>' +
+                '</li>';
+            }
+            return groupHtml;
         }
+        
+        // Render nhóm Daily trước, Adhoc sau
+        html += renderGroup('Nhiệm vụ Hàng ngày', dailyQuests, '🔁');
+        html += renderGroup('Nhiệm vụ 1 Lần', adhocQuests, '🎯');
+        
         els.questList.innerHTML = html;
     }
     
@@ -143,7 +156,7 @@
                     Quest.add(title, statsArray, diff, type);
                     renderAllUI();
                     els.questTitleInput.value = '';
-                    UI.showToast('✨ Quest đã thêm!', 'success');
+                    UI.showToast('✨ Nhiệm vụ đã được giao!', 'success');
                 }
             });
         }
@@ -163,7 +176,7 @@
                 if (target.classList.contains('btn-delete')) {
                     Quest.remove(questId);
                     renderAllUI();
-                    UI.showToast('🗑️ Đã xóa quest', 'success');
+                    UI.showToast('🗑️ Đã hủy nhiệm vụ', 'success');
                 }
             });
         }

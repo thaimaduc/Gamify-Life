@@ -24,36 +24,47 @@
                 <div id="stats-container"></div>
             </aside>
             
+            <!-- 📜 CỘT GIỮA: QUEST LOG -->
             <section class="col-center" id="quest-section">
-                <h2>📜 Quests</h2>
-                <form id="quest-form">
-                    <div class="quest-form-row">
-                        <input type="text" id="quest-title" placeholder="Tên nhiệm vụ..." required>
+                
+                <!-- Khu vực 1: Card Tạo Nhiệm Vụ -->
+                <div class="quest-creation-card">
+                    <h2>➕ Phân Công Nhiệm Vụ</h2>
+                    <form id="quest-form">
+                        <input type="text" id="quest-title" placeholder="Bạn muốn hoàn thành việc gì hôm nay?..." required>
                         
-                        <!-- 💡 MỚI: Chọn loại Task -->
-                        <select id="quest-type" title="Loại nhiệm vụ">
-                            <option value="adhoc" selected>Một lần (Ad-hoc)</option>
-                            <option value="daily">Hàng ngày (Daily)</option>
-                        </select>
+                        <div class="quest-form-row">
+                            <select id="quest-type" title="Loại nhiệm vụ">
+                                <option value="adhoc" selected>🎯 Một lần (Ad-hoc)</option>
+                                <option value="daily">🔁 Hàng ngày (Daily)</option>
+                            </select>
+                            <select id="quest-difficulty" title="Độ khó">
+                                <option value="easy">Dễ (x1)</option>
+                                <option value="medium" selected>Vừa (x2)</option>
+                                <option value="hard">Khó (x3)</option>
+                            </select>
+                        </div>
+
+                        <div class="stat-toggles-container">
+                            <div class="stat-toggles-label">Chọn hệ năng lực (Có thể chọn nhiều):</div>
+                            <div class="stat-toggles" id="quest-stat-toggles">
+                                <label class="stat-toggle"><input type="checkbox" value="str"> <span>⚔️ STR</span></label>
+                                <label class="stat-toggle"><input type="checkbox" value="agi"> <span>🪽 AGI</span></label>
+                                <label class="stat-toggle"><input type="checkbox" value="int"> <span>🧠 INT</span></label>
+                                <label class="stat-toggle"><input type="checkbox" value="vit"> <span>❤️ VIT</span></label>
+                                <label class="stat-toggle"><input type="checkbox" value="lck"> <span>🍀 LCK</span></label>
+                            </div>
+                        </div>
                         
-                        <select id="quest-difficulty" title="Độ khó">
-                            <option value="easy">Dễ</option>
-                            <option value="medium" selected>Vừa</option>
-                            <option value="hard">Khó</option>
-                        </select>
-                        <button type="submit">➕ Tạo</button>
-                    </div>
-                    
-                    <!-- 💡 MỚI: Cho phép chọn nhiều Stats cùng lúc -->
-                    <div class="stat-toggles" id="quest-stat-toggles">
-                        <label class="stat-toggle"><input type="checkbox" value="str" checked> ⚔️ STR</label>
-                        <label class="stat-toggle"><input type="checkbox" value="agi"> 🪽 AGI</label>
-                        <label class="stat-toggle"><input type="checkbox" value="int"> 🧠 INT</label>
-                        <label class="stat-toggle"><input type="checkbox" value="vit"> ❤️ VIT</label>
-                        <label class="stat-toggle"><input type="checkbox" value="lck"> 🍀 LCK</label>
-                    </div>
-                </form>
-                <ul id="quest-list"></ul>
+                        <button type="submit" class="btn-create-quest">🚀 Tạo Nhiệm Vụ</button>
+                    </form>
+                </div>
+
+                <!-- Khu vực 2: Danh sách Nhiệm Vụ -->
+                <div class="quest-board-card">
+                    <h2>📜 Bảng Nhiệm Vụ</h2>
+                    <ul id="quest-list"></ul>
+                </div>
             </section>
 
             <aside class="col-right" id="gamification-section">
