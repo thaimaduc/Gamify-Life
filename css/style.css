@@ -390,3 +390,34 @@
     #badges-container { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
     #radar-container svg { max-width: 180px; }
 }
+
+/* ===== TAB SHOP - GIAO DIỆN FORM ===== */
+#shop-form-add input {
+    background: rgba(255, 255, 255, 0.03); 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #eaeaea;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#shop-form-add input:focus {
+    border-color: #a855f7;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+#shop-form-add input::placeholder {
+    color: #666;
+}
+
+.shop-form-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    margin-bottom: 16px;
+}

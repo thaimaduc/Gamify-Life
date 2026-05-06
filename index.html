@@ -88,24 +88,30 @@
                 </div>
             </aside>
             
-            <!-- 🛒 TAB 4: CỬA HÀNG (ĐÃ UPDATE FORM THÊM VẬT PHẨM) -->
+            <!-- 🛒 TAB 4: CỬA HÀNG -->
             <section class="col-center tab-content" id="tab-shop">
-                <!-- 💡 THÊM FORM QUẢN LÝ SHOP -->
+                
                 <div class="quest-creation-card" style="margin-bottom: 1.5rem;">
-                    <h2>➕ Thêm Phần Thưởng Mới</h2>
-                    <form id="shop-form-add">
-                        <div class="quest-form-row" style="margin-bottom: 10px;">
-                            <input type="text" id="new-item-name" placeholder="Tên phần thưởng (VD: Xem phim)..." required style="flex: 2;">
-                            <input type="number" id="new-item-price" placeholder="Giá (VD: 200)" required style="flex: 1;" min="1">
-                            <input type="text" id="new-item-icon" value="🎁" title="Emoji Icon" style="width: 60px; text-align: center;">
+                    <h2 style="display: flex; align-items: center; gap: 8px; text-transform: uppercase;">
+                        <span style="color: #a855f7;">➕</span> Thêm Phần Thưởng Mới
+                    </h2>
+                    <form id="shop-form-add" style="margin-top: 15px;">
+                        <!-- Dòng 1: Tên vật phẩm -->
+                        <input type="text" id="new-item-name" placeholder="Tên phần thưởng (VD: Xem phim 1 tập)..." required>
+                        
+                        <!-- Dòng 2: Giá và Icon -->
+                        <div class="shop-form-row">
+                            <input type="number" id="new-item-price" placeholder="Giá (VD: 200)" required min="1" style="flex: 1;">
+                            <input type="text" id="new-item-icon" value="🎁" title="Emoji Icon" style="width: 80px; text-align: center;">
                         </div>
-                        <button type="submit" class="btn-create-quest">🛒 Thêm Lên Kệ</button>
+
+                        <button type="submit" class="btn-create-quest">🛒 THÊM LÊN KỆ</button>
                     </form>
                 </div>
 
                 <div class="quest-board-card">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <h2>🛒 Chợ Đen Phần Thưởng</h2>
+                        <h2 style="text-transform: uppercase;">🛒 Chợ Đen Phần Thưởng</h2>
                         <div style="font-size: 1.25rem; font-weight: bold; color: #facc15;">💰 <span id="gold-display">0</span></div>
                     </div>
                     <p style="color: #a0a0b0; font-size: 0.9rem; margin-bottom: 1.5rem;">Dùng Vàng cày được để mua quyền lợi ngoài đời thực. Hết tiền thì cấm chơi!</p>
