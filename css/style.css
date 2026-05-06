@@ -1,0 +1,615 @@
+/* ===== Phase 5: Circular Stat Cards Container ===== */
+#stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    
+    /* 💡 Bí kíp mới: Khoảng cách ngang là 5%. */
+    gap: 1rem 5%; 
+    
+    width: 100%;
+    max-width: 340px; 
+    margin: 0 auto 1.5rem auto;
+}
+
+/* ===== Thẻ Vòng Tròn (Tự động co giãn) ===== */
+.stat-card.circular-card {
+    position: relative;
+    
+    /* 💡 Ép LUÔN chiếm 30% diện tích container (3 thẻ = 90% + 10% gap) */
+    width: 30%; 
+    aspect-ratio: 1 / 1; /* Tự động giữ hình vuông tròn hoàn hảo mà không cần height cứng */
+    height: auto;
+    
+    border-radius: 50%;
+    background: conic-gradient(var(--stat-color) var(--progress), #0f3460 0deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    flex: 0 0 auto;
+}
+
+.stat-card.circular-card:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 0 15px var(--stat-color);
+}
+
+/* ===== Lõi màu nền bên trong ===== */
+.stat-inner {
+    width: 88%; /* Nhỏ hơn vòng ngoài 12% để lộ ra dải màu Progress */
+    aspect-ratio: 1 / 1;
+    height: auto;
+    background: #16213e; 
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+}
+
+/* Căn chỉnh lại chữ cho vừa vặn trong hình tròn */
+.stat-card.circular-card .stat-icon {
+    font-size: 1.3rem;
+    margin-bottom: 2px;
+    line-height: 1;
+}
+
+.stat-card.circular-card .stat-label-small {
+    color: #a0a0b0;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 2px 0;
+    white-space: nowrap;
+}
+
+/* Chữ Hệ số nhân (Multiplier) */
+.stat-mult {
+    color: #facc15;
+    font-weight: 800;
+    font-size: 0.85em;
+    margin-left: 2px;
+    text-shadow: 0 0 5px rgba(250, 204, 21, 0.4);
+}
+
+.stat-card.circular-card .stat-value {
+    color: var(--stat-color); /* Chữ Level tự đổi màu theo hệ stat luôn */
+    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 1;
+}
+
+/* Dấu hiệu ứng bấm (pulse) */
+.stat-card.animate {
+    animation: statPulse 0.4s ease;
+}
+@keyframes statPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+
+/* ===== Phase 3: Quest Styles ===== */
+#quest-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #16213e;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+#quest-section h2 {
+    margin-bottom: 1rem;
+    color: #00d4ff;
+    font-size: 1.25rem;
+}
+
+#quest-form {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+#quest-form input[type="text"] {
+    flex: 2;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #0f3460;
+    background: #1a1a2e;
+    color: #eaeaea;
+    font-size: 0.9rem;
+    min-width: 150px;
+}
+
+#quest-form select {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #0f3460;
+    background: #1a1a2e;
+    color: #eaeaea;
+    font-size: 0.9rem;
+    min-width: 120px;
+    cursor: pointer;
+}
+
+#quest-form button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(135deg, #7b2ff7, #00d4ff);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    white-space: nowrap;
+}
+
+#quest-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(123, 47, 247, 0.4);
+}
+
+#quest-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quest-card {
+    background: #16213e;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: transform 0.2s, opacity 0.3s;
+    border-left: 4px solid #7b2ff7;
+}
+
+.quest-card:hover {
+    transform: translateX(4px);
+}
+
+.quest-card.done {
+    opacity: 0.6;
+    text-decoration: line-through;
+    border-left-color: #10b981;
+    background: #0f3460;
+}
+
+.quest-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.quest-title {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #eaeaea;
+}
+
+.quest-meta {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.quest-stat-badge {
+    background: rgba(123, 47, 247, 0.2);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: #00d4ff;
+}
+
+.quest-difficulty-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.quest-difficulty-badge.easy {
+    background: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+}
+
+.quest-difficulty-badge.medium {
+    background: rgba(234, 179, 8, 0.2);
+    color: #facc15;
+}
+
+.quest-difficulty-badge.hard {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+
+.quest-reward {
+    font-size: 0.8rem;
+    color: #34d399;
+    font-weight: 500;
+}
+
+.quest-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.quest-actions button {
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: opacity 0.2s;
+}
+
+.quest-actions button:hover {
+    opacity: 0.8;
+}
+
+.btn-complete {
+    background: #10b981;
+    color: white;
+}
+
+.btn-complete:disabled {
+    background: #6b7280;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.btn-delete {
+    background: #ef4444;
+    color: white;
+}
+
+/* Responsive: Mobile */
+@media (max-width: 480px) {
+    #quest-form {
+        flex-direction: column;
+    }
+    #quest-form input[type="text"],
+    #quest-form select,
+    #quest-form button {
+        width: 100%;
+    }
+    .quest-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .quest-meta {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+/* ===== Phase 4: Gamification Styles ===== */
+#gamification-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #16213e;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: grid;
+    gap: 1rem;
+}
+
+#streak-display, #title-display {
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+}
+
+#streak-display {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: #2d3436;
+}
+
+#title-display {
+    background: linear-gradient(135deg, #7b2ff7, #00d4ff);
+    color: white;
+}
+
+#badges-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.badge-card {
+    background: #16213e;
+    border: 2px solid #0f3460;
+    border-radius: 8px;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.3s;
+}
+
+.badge-card.unlocked {
+    border-color: #00d4ff;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+}
+
+.badge-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.badge-name {
+    font-size: 0.75rem;
+    color: #eaeaea;
+}
+
+.badge-card.locked .badge-icon {
+    filter: grayscale(1);
+    opacity: 0.5;
+}
+
+/* Toast Notification */
+#toast-container {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 9999;
+    max-width: 300px;
+}
+
+.toast {
+    background: #16213e;
+    color: #eaeaea;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: slideIn 0.3s ease-out;
+    border-left: 4px solid #7b2ff7;
+}
+
+.toast.success { border-left-color: #10b981; }
+.toast.levelup { border-left-color: #facc15; background: #1e1a3a; }
+.toast.badge { border-left-color: #00d4ff; background: #1a233a; }
+.toast.streak { border-left-color: #ff6b6b; }
+
+.toast.hide {
+    animation: slideOut 0.3s ease-in forwards;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+/* Level Up Overlay */
+#levelup-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+#levelup-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.levelup-modal {
+    background: linear-gradient(135deg, #7b2ff7, #00d4ff);
+    padding: 2rem;
+    border-radius: 16px;
+    text-align: center;
+    color: white;
+    max-width: 360px;
+    width: 90%;
+    animation: pulse 1.5s infinite;
+}
+
+.levelup-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.levelup-level {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.levelup-title-text {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+}
+
+#close-levelup {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#close-levelup:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+}
+
+.hidden { display: none !important; }
+
+/* Responsive */
+@media (max-width: 480px) {
+    #toast-container {
+        bottom: 1rem; right: 1rem; left: 1rem;
+        max-width: calc(100% - 2rem);
+    }
+    #badges-container {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+}
+
+/* ===== Phase 5: Radar Chart + Alloc Points ===== */
+#radar-container {
+    width: 100%;
+    max-width: 340px; /* Giữ box thon gọn */
+    margin: 0 auto 1.5rem auto; 
+    padding: 1.5rem;
+    position: relative;
+    
+    /* Hiệu ứng nền kính mờ đồng bộ */
+    background: rgba(22, 33, 62, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    
+    /* Căn giữa chart bên trong */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Thêm style cho tiêu đề của box Radar */
+.radar-title {
+    color: #a0a0b0;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Alloc points highlight */
+#alloc-points.highlight {
+    color: #facc15;
+    font-weight: bold;
+    animation: pulse 1.5s infinite;
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center; color: #a0a0b0;
+    padding: 1.5rem; font-style: italic;
+}
+
+/* ===== SVG Radar Chart Support (Phase 5+) ===== */
+#radar-container svg {
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+#radar-container .radar-grid { stroke: #0f3460; opacity: 0.3; }
+#radar-container .radar-axis { stroke: #0f3460; opacity: 0.2; }
+#radar-container .radar-polygon { fill: #00d4ff; fill-opacity: 0.25; stroke: #00d4ff; stroke-width: 2; }
+#radar-container .radar-dot { fill: #16213e; stroke: #00d4ff; stroke-width: 2; }
+#radar-container .radar-label { font-size: 10px; fill: #00d4ff; text-anchor: middle; }
+
+/* Responsive */
+@media (max-width: 480px) {
+    #radar-container svg { max-width: 180px; }
+}
+
+/* Fix SVG text rendering */
+#radar-container svg text {
+    text-shadow: 0 0 3px rgba(0,0,0,0.8);
+    pointer-events: none;
+}
+
+#radar-container .radar-label tspan:first-child {
+    font-size: 16px;
+    fill: #ffffff;
+}
+
+#radar-container .radar-label tspan:last-child {
+    font-size: 10px;
+    fill: #00d4ff;
+    font-weight: bold;
+}
+
+/* Bỏ margin-top thừa vì CSS Grid đã lo khoảng cách (gap) */
+#quest-section, #gamification-section {
+    margin-top: 0;
+}
+
+/* Thêm hiệu ứng Kính mờ (Glassmorphism) nhẹ cho các khu vực chính */
+#stats, #quest-section, #gamification-section {
+    background: rgba(22, 33, 62, 0.7);
+    backdrop-filter: blur(10px); /* Kính mờ */
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Viền mỏng tinh tế */
+}
+
+/* Căn chỉnh lại Form Quest trên Desktop cho nằm gọn 1 dòng */
+#quest-form {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: nowrap; /* Cố gắng không xuống dòng */
+}
+#quest-form input[type="text"] {
+    flex: 1; /* Chiếm phần lớn diện tích */
+    min-width: 0; /* Chống tràn form */
+}
+#quest-form select {
+    width: auto;
+    min-width: fit-content;
+}
+
+/* Responsive Form Quest trên Mobile */
+@media (max-width: 767px) {
+    #quest-form { flex-wrap: wrap; }
+    #quest-form input[type="text"] { width: 100%; flex: auto; }
+    #quest-form select { flex: 1; }
+    #quest-form button { width: 100%; }
+}
+
+/* Style nhẹ cho tiêu đề Badges */
+.badges-title {
+    color: #a0a0b0;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}

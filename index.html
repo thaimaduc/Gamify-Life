@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gamify Life</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gamify Life</h1>
+            <p>🎮</p>
+        </header>
+        <main class="dashboard-layout">
+            <aside class="col-left">
+                <div id="stats">Đang tải...</div>
+                
+                <div id="radar-container">
+    <div class="radar-title">📊 Chỉ số cơ bản</div>
+    </div>
+                
+                <div id="stats-container"></div>
+            </aside>
+            
+            <section class="col-center" id="quest-section">
+                <h2>📜 Quests</h2>
+                <form id="quest-form">
+                    <input type="text" id="quest-title" placeholder="Tên nhiệm vụ..." required>
+                    <select id="quest-stat" title="Hệ năng lực">
+                        <option value="str">⚔️ STR</option>
+                        <option value="agi">🪽 AGI</option>
+                        <option value="int">🧠 INT</option>
+                        <option value="vit">❤️ VIT</option>
+                        <option value="lck">🍀 LCK</option>
+                    </select>
+                    <select id="quest-difficulty" title="Độ khó">
+                        <option value="easy">Dễ</option>
+                        <option value="medium" selected>Vừa</option>
+                        <option value="hard">Khó</option>
+                    </select>
+                    <button type="submit">➕ Tạo</button>
+                </form>
+                <ul id="quest-list"></ul>
+            </section>
+
+            <aside class="col-right" id="gamification-section">
+                <div id="streak-display">🔥 Streak: <span id="streak-value">0</span> ngày</div>
+                <div id="title-display">🎖 <span id="user-title">Tập Sự</span></div>
+                
+                <h3 class="badges-title">Thành tựu</h3>
+                <div id="badges-container"></div>
+            </aside>
+        </main>
+    </div>
+    
+    <!-- Toast & Level Up Overlay -->
+    <div id="toast-container"></div>
+    <div id="levelup-overlay" class="hidden">
+        <div class="levelup-modal">
+            <h2 class="levelup-title">🎉 LEVEL UP!</h2>
+            <p class="levelup-level">Level <span id="levelup-new-level"></span></p>
+            <p class="levelup-title-text" id="levelup-title-text"></p>
+            <button id="close-levelup">Đóng</button>
+        </div>
+    </div>
+
+    <!-- Scripts: ĐÚNG THỨ TỰ (thêm chart.js) -->
+    <script src="js/storage.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/quest.js"></script>
+    <script src="js/reward.js"></script>
+    <script src="js/chart.js"></script> <!-- ✅ MỚI -->
+    <script src="js/main.js"></script>
+</body>
+</html>
