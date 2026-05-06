@@ -1,4 +1,4 @@
-/* main.js - Phase 5.5 (Multi-Stats, Task Types, Shared EXP & Tab Navigation) */
+/* main.js - Phase 6.0 (Economy System, Backup & Tabs) */
 (function() {
     'use strict';
     
@@ -17,7 +17,8 @@
             toastContainer: document.getElementById('toast-container'),
             levelupOverlay: document.getElementById('levelup-overlay'),
             allocPointsDisplay: document.getElementById('alloc-points'),
-            radarContainer: document.getElementById('radar-container')
+            radarContainer: document.getElementById('radar-container'),
+            goldDisplay: document.getElementById('gold-display') // 💡 MỚI
         };
     }
     
@@ -34,8 +35,13 @@
             els.allocPointsDisplay.className = user.allocPoints > 0 ? 'highlight' : '';
         }
         
+        if (els.goldDisplay) {
+            els.goldDisplay.textContent = user.gold || 0;
+        }
+        
         UI.renderBadges(State.getBadges());
         renderQuestList();
+        renderShop(); // 💡 Render Shop
         
         if (els.streakValue) els.streakValue.textContent = State.getStreak();
         if (els.userTitle) els.userTitle.textContent = Reward.getTitleByLevel(user.characterLevel);
@@ -52,7 +58,7 @@
     
     // ===== INIT =====
     function init() {
-        console.log('🚀 App initializing (Phase 5.5 with Tabs)...');
+        console.log('🚀 App initializing (Phase 6.0: Economy & Backup)...');
         cacheDOM();
         if (typeof State === 'undefined' || typeof UI === 'undefined') return;
         
@@ -108,7 +114,7 @@
                             '<span class="quest-difficulty-badge ' + q.difficulty + '">' + capitalize(q.difficulty) + '</span>' +
                         '</div>' +
                     '</div>' +
-                    '<div class="quest-reward">+' + reward.baseExp + ' EXP Tổng | Chia đều +' + reward.statBonusExp + ' Stat EXP</div>' +
+                    '<div class="quest-reward">+' + reward.baseExp + ' EXP | +' + (reward.gold || 0) + ' 💰</div>' +
                     '<div class="quest-actions">' +
                         '<button class="btn-complete" data-id="' + q.id + '"' + (q.done ? ' disabled' : '') + '>✅ ' + (q.done ? 'Đã xong' : 'Hoàn thành') + '</button>' +
                         '<button class="btn-delete" data-id="' + q.id + '">🗑️</button>' +
@@ -123,6 +129,35 @@
         
         els.questList.innerHTML = html;
     }
+
+    // ===== 💡 RENDER SHOP =====
+    var shopItems = [
+        { id: 1, name: '1 Giờ chơi Game/Giải trí', price: 500, icon: '🎮' },
+        { id: 2, name: 'Mua 1 ly Trà Sữa/Cà phê', price: 300, icon: '🧋' },
+        { id: 3, name: 'Lướt MXH vô tri 30p', price: 200, icon: '📱' },
+        { id: 4, name: 'Xem 1 tập Phim/Anime', price: 250, icon: '🎬' }
+    ];
+
+    function renderShop() {
+        var shopList = document.getElementById('shop-list');
+        if (!shopList) return;
+        
+        var html = '';
+        for (var i = 0; i < shopItems.length; i++) {
+            var item = shopItems[i];
+            html += '<li class="quest-card" style="flex-direction: row; justify-content: space-between; align-items: center; border-left-color: #facc15;">' +
+                        '<div style="display: flex; align-items: center; gap: 1rem;">' +
+                            '<span style="font-size: 2rem;">' + item.icon + '</span>' +
+                            '<span style="font-weight: bold; font-size: 1rem; color: #eaeaea;">' + escapeHtml(item.name) + '</span>' +
+                        '</div>' +
+                        '<button class="btn-buy-item" data-price="' + item.price + '" data-name="' + escapeHtml(item.name) + '" ' +
+                            'style="background: #facc15; color: #1a1a2e; font-weight: bold; padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;">' +
+                            'Mua (-' + item.price + ' 💰)' +
+                        '</button>' +
+                    '</li>';
+        }
+        shopList.innerHTML = html;
+    }
     
     // ===== EVENT LISTENERS =====
     function setupEventListeners() {
@@ -131,7 +166,6 @@
                 e.preventDefault();
                 var title = els.questTitleInput.value.trim();
                 var diff = els.questDiffSelect.value;
-                
                 var typeEl = document.getElementById('quest-type');
                 var type = typeEl ? typeEl.value : 'adhoc';
                 
@@ -192,6 +226,9 @@
                     if (result.success) {
                         renderAllUI();
                         UI.showToast(statMap[statName].label + ' đã tăng hệ số EXP lên x' + result.newMultiplier + '! 📈', 'success');
+                    } else if (result.reason === 'max') {
+                        // 💡 Chặn đứng nếu đạt Max 3.0
+                        UI.showToast('⚠️ Hệ số nhân đã đạt mức TỐI ĐA (x3.0)!', 'streak');
                     }
                 } else {
                     UI.showToast('Chưa có điểm phân bổ!', 'success');
@@ -199,21 +236,18 @@
             });
         }
 
-        // ===== 💡 LOGIC CHUYỂN TABS =====
+        // ===== LOGIC CHUYỂN TABS =====
         var navBtns = document.querySelectorAll('.nav-btn');
         var tabContents = document.querySelectorAll('.tab-content');
         
         if (navBtns.length > 0) {
             navBtns.forEach(function(btn) {
                 btn.addEventListener('click', function() {
-                    // Xóa trạng thái active của tất cả các nút và tab
                     navBtns.forEach(function(b) { b.classList.remove('active'); });
                     tabContents.forEach(function(t) { t.classList.remove('active'); });
                     
-                    // Thêm trạng thái active cho nút được click
                     this.classList.add('active');
                     
-                    // Hiển thị Tab tương ứng
                     var targetId = this.getAttribute('data-target');
                     var targetTab = document.getElementById(targetId);
                     if (targetTab) {
@@ -222,9 +256,64 @@
                 });
             });
         }
+
+        // ===== 💡 LOGIC SHOP MUA HÀNG =====
+        var shopList = document.getElementById('shop-list');
+        if (shopList) {
+            shopList.addEventListener('click', function(e) {
+                if (e.target.classList.contains('btn-buy-item')) {
+                    var price = parseInt(e.target.getAttribute('data-price'));
+                    var name = e.target.getAttribute('data-name');
+                    
+                    if (State.spendGold(price)) {
+                        renderAllUI();
+                        UI.showToast('Đã mua: ' + name + ' (-' + price + ' 💰)', 'success');
+                    } else {
+                        UI.showToast('⚠️ Nghèo quá, đi làm Quest kiếm thêm Vàng đi!', 'streak');
+                    }
+                }
+            });
+        }
+
+        // ===== 💡 LOGIC BACKUP DATA =====
+        var btnExport = document.getElementById('btn-export');
+        if (btnExport) {
+            btnExport.addEventListener('click', function() {
+                var data = State.exportData();
+                var blob = new Blob([data], { type: 'application/json' });
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = 'GamifyLife_Backup_' + new Date().toISOString().split('T')[0] + '.json';
+                a.click();
+                URL.revokeObjectURL(url);
+                UI.showToast('📥 Đã tải file Backup về máy!', 'success');
+            });
+        }
+
+        var btnImport = document.getElementById('btn-import');
+        var importFile = document.getElementById('import-file');
+        if (btnImport && importFile) {
+            btnImport.addEventListener('click', function() {
+                if (!importFile.files || importFile.files.length === 0) {
+                    UI.showToast('⚠️ Vui lòng chọn file JSON trước!', 'streak');
+                    return;
+                }
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    if (State.importData(e.target.result)) {
+                        alert('Phục hồi dữ liệu thành công! Trang sẽ tải lại.');
+                        location.reload();
+                    } else {
+                        UI.showToast('⚠️ File không hợp lệ hoặc bị lỗi!', 'streak');
+                    }
+                };
+                reader.readAsText(importFile.files[0]);
+            });
+        }
     }
     
-    // ===== COMPLETE QUEST (CHIA ĐỀU EXP) =====
+    // ===== COMPLETE QUEST =====
     function completeQuest(questId) {
         var reward = Quest.complete(questId);
         if (!reward) return;
@@ -233,6 +322,10 @@
         var statsArray = reward.statNames || [reward.statName]; 
         var statCount = statsArray.length;
         var expPerStat = Math.floor(reward.statBonusExp / statCount); 
+        
+        // 💡 CỘNG VÀNG
+        var goldEarned = reward.gold || 0;
+        State.addGold(goldEarned);
         
         var leveledUpStats = [];
         var statToastDetails = [];
@@ -255,9 +348,7 @@
         renderAllUI();
         
         if (charResult.leveledUp > 0) {
-            var msg = charResult.leveledUp > 1 
-                ? '🚀 Lên ' + charResult.leveledUp + ' cấp!' 
-                : '🎉 Level Up!';
+            var msg = charResult.leveledUp > 1 ? '🚀 Lên ' + charResult.leveledUp + ' cấp!' : '🎉 Level Up!';
             UI.showToast(msg + ' +' + charResult.newAllocPoints + ' điểm phân bổ', 'levelup');
             
             if (charResult.leveledUp === 1) {
@@ -276,7 +367,8 @@
             }
         }
         
-        UI.showToast('Hoàn thành! Tổng +' + reward.baseExp + ' EXP | ' + statToastDetails.join(', '), 'success');
+        // 💡 BÁO CÁO CÓ VÀNG BÊN TRONG
+        UI.showToast('Hoàn thành! +' + reward.baseExp + ' EXP | +' + goldEarned + ' 💰', 'success');
     }
     
     // ===== UTILS =====

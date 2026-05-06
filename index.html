@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gamify Life</title>
     <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
     <div class="container">
@@ -19,6 +19,8 @@
             <button class="nav-btn" data-target="tab-profile">👤 Hồ sơ</button>
             <button class="nav-btn active" data-target="tab-quests">📜 Nhiệm vụ</button>
             <button class="nav-btn" data-target="tab-achievements">🏆 Thành tựu</button>
+            <button class="nav-btn" data-target="tab-shop">🛒 Cửa hàng</button>
+            <button class="nav-btn" data-target="tab-settings">⚙️ Cài đặt</button>
         </nav>
 
         <main class="dashboard-layout">
@@ -34,10 +36,9 @@
                 <div id="stats-container"></div>
             </aside>
             
-            <!-- 📜 TAB 2: NHIỆM VỤ (Mặc định mở) -->
+            <!-- 📜 TAB 2: NHIỆM VỤ -->
             <section class="col-center tab-content active" id="tab-quests">
                 
-                <!-- Khu vực 1: Card Tạo Nhiệm Vụ -->
                 <div class="quest-creation-card">
                     <h2>➕ Phân Công Nhiệm Vụ</h2>
                     <form id="quest-form">
@@ -70,7 +71,6 @@
                     </form>
                 </div>
 
-                <!-- Khu vực 2: Danh sách Nhiệm Vụ -->
                 <div class="quest-board-card">
                     <h2>📜 Bảng Nhiệm Vụ</h2>
                     <ul id="quest-list"></ul>
@@ -87,6 +87,37 @@
                     <div id="badges-container"></div>
                 </div>
             </aside>
+            
+            <!-- 🛒 TAB 4: CỬA HÀNG (MỚI) -->
+            <section class="col-center tab-content" id="tab-shop">
+                <div class="quest-board-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h2>🛒 Chợ Đen Phần Thưởng</h2>
+                        <div style="font-size: 1.25rem; font-weight: bold; color: #facc15;">💰 <span id="gold-display">0</span></div>
+                    </div>
+                    <p style="color: #a0a0b0; font-size: 0.9rem; margin-bottom: 1.5rem;">Dùng Vàng cày được để mua quyền lợi ngoài đời thực. Hết tiền thì cấm chơi!</p>
+                    
+                    <ul id="shop-list" style="list-style: none; padding: 0;">
+                        <!-- JS sẽ render item vào đây -->
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ⚙️ TAB 5: CÀI ĐẶT (MỚI) -->
+            <section class="col-center tab-content" id="tab-settings">
+                <div class="quest-creation-card">
+                    <h2>⚙️ Quản lý Dữ liệu</h2>
+                    <p style="color: #a0a0b0; font-size: 0.9rem; margin-bottom: 1.5rem;">Bảo hiểm nhân thọ cho công sức cày cuốc của bạn.</p>
+                    
+                    <button id="btn-export" class="btn-create-quest" style="margin-bottom: 1rem; background: linear-gradient(135deg, #10b981, #047857);">📥 Xuất Dữ Liệu (Backup)</button>
+                    
+                    <div style="border-top: 1px solid #0f3460; padding-top: 1rem; margin-top: 1rem;">
+                        <label style="color: #eaeaea; font-weight: bold; display: block; margin-bottom: 0.5rem;">📤 Nhập Dữ Liệu (Phục hồi):</label>
+                        <input type="file" id="import-file" accept=".json" style="color: #a0a0b0; margin-bottom: 1rem;">
+                        <button id="btn-import" class="btn-create-quest" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">Cập Nhật Dữ Liệu Mới</button>
+                    </div>
+                </div>
+            </section>
             
         </main>
     </div>
@@ -109,6 +140,6 @@
     <script src="js/quest.js"></script>
     <script src="js/reward.js"></script>
     <script src="js/chart.js"></script> 
-    <script src="js/main.js"></script>
+    <script src="js/main.js?v=6"></script>
 </body>
 </html>
