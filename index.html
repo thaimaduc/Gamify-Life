@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gamify Life</title>
     <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/style.css?v=2">
+    <link rel="stylesheet" href="css/style.css?v=3">
 </head>
 <body>
     <div class="container">
@@ -13,19 +13,29 @@
             <h1>Gamify Life</h1>
             <p>🎮</p>
         </header>
+        
+        <!-- ===== THANH ĐIỀU HƯỚNG TABS ===== -->
+        <nav class="app-nav">
+            <button class="nav-btn" data-target="tab-profile">👤 Hồ sơ</button>
+            <button class="nav-btn active" data-target="tab-quests">📜 Nhiệm vụ</button>
+            <button class="nav-btn" data-target="tab-achievements">🏆 Thành tựu</button>
+        </nav>
+
         <main class="dashboard-layout">
-            <aside class="col-left">
+            
+            <!-- 👤 TAB 1: HỒ SƠ -->
+            <aside class="col-left tab-content" id="tab-profile">
                 <div id="stats">Đang tải...</div>
                 
                 <div id="radar-container">
-    <div class="radar-title">📊 Chỉ số cơ bản</div>
-    </div>
+                    <div class="radar-title">📊 Chỉ số cơ bản</div>
+                </div>
                 
                 <div id="stats-container"></div>
             </aside>
             
-            <!-- 📜 CỘT GIỮA: QUEST LOG -->
-            <section class="col-center" id="quest-section">
+            <!-- 📜 TAB 2: NHIỆM VỤ (Mặc định mở) -->
+            <section class="col-center tab-content active" id="tab-quests">
                 
                 <!-- Khu vực 1: Card Tạo Nhiệm Vụ -->
                 <div class="quest-creation-card">
@@ -48,7 +58,7 @@
                         <div class="stat-toggles-container">
                             <div class="stat-toggles-label">Chọn hệ năng lực (Có thể chọn nhiều):</div>
                             <div class="stat-toggles" id="quest-stat-toggles">
-                                <label class="stat-toggle"><input type="checkbox" value="str"> <span>⚔️ STR</span></label>
+                                <label class="stat-toggle"><input type="checkbox" value="str" checked> <span>⚔️ STR</span></label>
                                 <label class="stat-toggle"><input type="checkbox" value="agi"> <span>🪽 AGI</span></label>
                                 <label class="stat-toggle"><input type="checkbox" value="int"> <span>🧠 INT</span></label>
                                 <label class="stat-toggle"><input type="checkbox" value="vit"> <span>❤️ VIT</span></label>
@@ -67,13 +77,17 @@
                 </div>
             </section>
 
-            <aside class="col-right" id="gamification-section">
-                <div id="streak-display">🔥 Streak: <span id="streak-value">0</span> ngày</div>
-                <div id="title-display">🎖 <span id="user-title">Tập Sự</span></div>
-                
-                <h3 class="badges-title">Thành tựu</h3>
-                <div id="badges-container"></div>
+            <!-- 🏆 TAB 3: THÀNH TỰU -->
+            <aside class="col-right tab-content" id="tab-achievements">
+                <div id="gamification-section">
+                    <div id="streak-display">🔥 Streak: <span id="streak-value">0</span> ngày</div>
+                    <div id="title-display">🎖 <span id="user-title">Tập Sự</span></div>
+                    
+                    <h3 class="badges-title">Thành tựu</h3>
+                    <div id="badges-container"></div>
+                </div>
             </aside>
+            
         </main>
     </div>
     
@@ -88,13 +102,13 @@
         </div>
     </div>
 
-    <!-- Scripts: ĐÚNG THỨ TỰ (thêm chart.js) -->
+    <!-- Scripts -->
     <script src="js/storage.js"></script>
     <script src="js/state.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/quest.js"></script>
     <script src="js/reward.js"></script>
-    <script src="js/chart.js"></script> <!-- ✅ MỚI -->
+    <script src="js/chart.js"></script> 
     <script src="js/main.js"></script>
 </body>
 </html>

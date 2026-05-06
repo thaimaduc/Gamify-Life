@@ -1,6 +1,4 @@
-/* main.js - Phase 5.5 (Multi-Stats, Task Types & Shared EXP)
- * Flow: Complete quest → Chia đều EXP cho Stats → Check level-up → Render 1 lần
- */
+/* main.js - Phase 5.5 (Multi-Stats, Task Types, Shared EXP & Tab Navigation) */
 (function() {
     'use strict';
     
@@ -15,7 +13,7 @@
             closeLevelup: document.getElementById('close-levelup'),
             questForm: document.getElementById('quest-form'),
             questTitleInput: document.getElementById('quest-title'),
-            questDiffSelect: document.getElementById('quest-difficulty'), // Đã xóa questStatSelect cũ
+            questDiffSelect: document.getElementById('quest-difficulty'),
             toastContainer: document.getElementById('toast-container'),
             levelupOverlay: document.getElementById('levelup-overlay'),
             allocPointsDisplay: document.getElementById('alloc-points'),
@@ -54,14 +52,13 @@
     
     // ===== INIT =====
     function init() {
-        console.log('🚀 App initializing (Phase 5.5)...');
+        console.log('🚀 App initializing (Phase 5.5 with Tabs)...');
         cacheDOM();
         if (typeof State === 'undefined' || typeof UI === 'undefined') return;
         
         State.load();
         Quest.load();
         
-        // 💡 Kích hoạt kiểm tra qua ngày để hồi sinh Daily Quest
         if(typeof Quest.checkDailyResets === 'function') {
             Quest.checkDailyResets(); 
         }
@@ -70,7 +67,7 @@
         setupEventListeners();
     }
     
-    // ===== RENDER QUEST LIST (Phân nhóm thông minh) =====
+    // ===== RENDER QUEST LIST =====
     function renderQuestList() {
         if (!els.questList) return;
         var quests = Quest.getAll();
@@ -80,13 +77,11 @@
             return;
         }
         
-        // 💡 Chia nhóm Task
         var dailyQuests = quests.filter(function(q) { return q.type === 'daily'; });
         var adhocQuests = quests.filter(function(q) { return q.type !== 'daily'; });
         
         var html = '';
         
-        // 💡 Hàm phụ để render từng nhóm Quest
         function renderGroup(title, groupQuests, icon) {
             if (groupQuests.length === 0) return '';
             
@@ -96,7 +91,6 @@
                 var q = groupQuests[i];
                 var reward = Quest.calcReward(q.difficulty);
                 
-                // Lấy danh sách Stats đã chọn
                 var statsArray = q.statTypes || [q.statType]; 
                 var statBadgesHtml = '';
                 for (var j = 0; j < statsArray.length; j++) {
@@ -124,7 +118,6 @@
             return groupHtml;
         }
         
-        // Render nhóm Daily trước, Adhoc sau
         html += renderGroup('Nhiệm vụ Hàng ngày', dailyQuests, '🔁');
         html += renderGroup('Nhiệm vụ 1 Lần', adhocQuests, '🎯');
         
@@ -139,17 +132,14 @@
                 var title = els.questTitleInput.value.trim();
                 var diff = els.questDiffSelect.value;
                 
-                // 💡 Lấy Loại Task
                 var typeEl = document.getElementById('quest-type');
                 var type = typeEl ? typeEl.value : 'adhoc';
                 
-                // 💡 Gom tất cả các checkbox Stat đang được tick
                 var statCheckboxes = document.querySelectorAll('#quest-stat-toggles input:checked');
                 var statsArray = [];
                 for (var k = 0; k < statCheckboxes.length; k++) {
                     statsArray.push(statCheckboxes[k].value);
                 }
-                // Nếu người dùng quên tick, mặc định chọn STR để tránh lỗi
                 if (statsArray.length === 0) statsArray = ['str'];
                 
                 if (title) {
@@ -188,7 +178,6 @@
             });
         }
         
-        // AllocPoints: Click thẻ vòng tròn để nâng hệ số Multiplier
         var statsContainer = document.getElementById('stats-container');
         if (statsContainer) {
             statsContainer.addEventListener('click', function(e) {
@@ -209,6 +198,30 @@
                 }
             });
         }
+
+        // ===== 💡 LOGIC CHUYỂN TABS =====
+        var navBtns = document.querySelectorAll('.nav-btn');
+        var tabContents = document.querySelectorAll('.tab-content');
+        
+        if (navBtns.length > 0) {
+            navBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    // Xóa trạng thái active của tất cả các nút và tab
+                    navBtns.forEach(function(b) { b.classList.remove('active'); });
+                    tabContents.forEach(function(t) { t.classList.remove('active'); });
+                    
+                    // Thêm trạng thái active cho nút được click
+                    this.classList.add('active');
+                    
+                    // Hiển thị Tab tương ứng
+                    var targetId = this.getAttribute('data-target');
+                    var targetTab = document.getElementById(targetId);
+                    if (targetTab) {
+                        targetTab.classList.add('active');
+                    }
+                });
+            });
+        }
     }
     
     // ===== COMPLETE QUEST (CHIA ĐỀU EXP) =====
@@ -216,13 +229,10 @@
         var reward = Quest.complete(questId);
         if (!reward) return;
         
-        // BƯỚC 1: Cộng EXP Tổng nhân vật
         var charResult = State.addTotalExp(reward.baseExp);
-        
-        // BƯỚC 2: Chia đều EXP cho các Stats được chọn
-        var statsArray = reward.statNames || [reward.statName]; // Fallback
+        var statsArray = reward.statNames || [reward.statName]; 
         var statCount = statsArray.length;
-        var expPerStat = Math.floor(reward.statBonusExp / statCount); // Thuật toán chia đều
+        var expPerStat = Math.floor(reward.statBonusExp / statCount); 
         
         var leveledUpStats = [];
         var statToastDetails = [];
@@ -232,11 +242,9 @@
             var sRes = State.addStatExp(sName, expPerStat);
             
             if (sRes.leveledUp) leveledUpStats.push(sName);
-            // Ghi nhận lượng EXP thực tế sau khi nhân Multiplier để báo cáo UI
             statToastDetails.push(statMap[sName].label + ' +' + (sRes.addedExp || expPerStat));
         }
         
-        // BƯỚC 3: Cập nhật Gamification (Streak)
         State.incrementCompletedQuests();
         State.updateLastActive();
         
@@ -244,10 +252,8 @@
         if (streakResult.reset) State.applyStreak(0);
         else if (streakResult.increment > 0) State.applyStreak(State.getStreak() + streakResult.increment);
         
-        // BƯỚC 4: Render lại UI
         renderAllUI();
         
-        // BƯỚC 5: Xả thông báo (Toasts)
         if (charResult.leveledUp > 0) {
             var msg = charResult.leveledUp > 1 
                 ? '🚀 Lên ' + charResult.leveledUp + ' cấp!' 
@@ -259,12 +265,10 @@
             }
         }
         
-        // Báo cáo nếu có Stat lên cấp (có thể nhiều stat lên cấp cùng lúc)
         for (var j = 0; j < leveledUpStats.length; j++) {
             UI.showToast(statMap[leveledUpStats[j]].label + ' lên cấp! ⬆️', 'success');
         }
         
-        // Kiểm tra mở khóa huy hiệu (Badges)
         var newBadges = Reward.checkBadges(State.getUser());
         for (var k = 0; k < newBadges.length; k++) {
             if (State.unlockBadge(newBadges[k].id)) {
@@ -272,7 +276,6 @@
             }
         }
         
-        // Báo cáo tóm tắt lượng EXP cày được
         UI.showToast('Hoàn thành! Tổng +' + reward.baseExp + ' EXP | ' + statToastDetails.join(', '), 'success');
     }
     
