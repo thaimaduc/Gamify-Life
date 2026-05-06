@@ -1,36 +1,31 @@
-/* quest.js - Phase 5 (New EXP System Compatible)
- * Reward format: { baseExp, statBonusExp, statName }
- * Base EXP cho character level, Bonus EXP cho stat tương ứng
- */
+/* quest.js - Phase 5.5 (Multi-Stats + Daily Quests) */
 var Quest = (function() {
     'use strict';
     
     var quests = [];
-    
-    // ===== CONFIG: Cân bằng reward =====
     var REWARD_CONFIG = {
-        easy:   { baseExp: 25, statBonus: 10 },   // Nhẹ nhàng, duy trì streak
-        medium: { baseExp: 50, statBonus: 25 },   // Task tiêu chuẩn
-        hard:   { baseExp: 90, statBonus: 45 }    // Thử thách lớn
+        easy:   { baseExp: 25, statBonus: 10 },
+        medium: { baseExp: 50, statBonus: 25 },
+        hard:   { baseExp: 90, statBonus: 45 }
     };
     
     function load() {
         var saved = Storage.load('gamify_quests');
         quests = Array.isArray(saved) ? saved : [];
     }
+    function save() { Storage.save('gamify_quests', quests); }
     
-    function save() {
-        Storage.save('gamify_quests', quests);
-    }
-    
-    function add(title, statType, difficulty) {
+    // 💡 SỬA: Nhận mảng statTypes và thêm thông số type (daily/adhoc)
+    function add(title, statTypesArray, difficulty, type) {
         var newQuest = {
             id: Date.now(),
             title: title.trim(),
-            statType: statType,
+            statTypes: statTypesArray, // Giờ là Array: ['str', 'int']
             difficulty: difficulty,
+            type: type || 'adhoc',     // Loại nhiệm vụ
             done: false,
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            completedAt: null          // Lưu ngày hoàn thành để tính năng Reset hoạt động
         };
         quests.push(newQuest);
         save();
@@ -42,8 +37,11 @@ var Quest = (function() {
             var q = quests[i];
             if (q.id === questId && !q.done) {
                 q.done = true;
+                q.completedAt = new Date().toISOString(); // Đánh dấu thời điểm xong
+                
                 var reward = calcReward(q.difficulty);
-                reward.statName = q.statType; // Gắn stat để state.js biết cộng vào đâu
+                // 💡 SỬA: Trả về mảng statNames hoặc tương thích ngược với statType cũ
+                reward.statNames = q.statTypes || [q.statType]; 
                 save();
                 return reward;
             }
@@ -62,30 +60,37 @@ var Quest = (function() {
         return false;
     }
     
-    function getAll() {
-        return quests.slice(); // Trả bản sao, tránh modify trực tiếp
-    }
+    function getAll() { return quests.slice(); }
     
-    // Tính reward theo format mới
     function calcReward(difficulty) {
         var cfg = REWARD_CONFIG[difficulty] || REWARD_CONFIG.easy;
-        return {
-            baseExp: cfg.baseExp,        // Cộng vào character totalExp
-            statBonusExp: cfg.statBonus  // Cộng vào stat tương ứng
-            // statName sẽ được gán thêm ở hàm complete()
-        };
+        return { baseExp: cfg.baseExp, statBonusExp: cfg.statBonus };
+    }
+
+    // 💡 MỚI: Hàm kiểm tra qua ngày để Reset Daily Quest
+    function checkDailyResets() {
+        var changed = false;
+        var todayString = new Date().toDateString();
+        
+        for (var i = 0; i < quests.length; i++) {
+            var q = quests[i];
+            // Nếu là Daily Task và đã làm xong
+            if (q.type === 'daily' && q.done && q.completedAt) {
+                var compDate = new Date(q.completedAt).toDateString();
+                // Nếu ngày hoàn thành khác ngày hôm nay -> Reset về chưa làm!
+                if (compDate !== todayString) {
+                    q.done = false;
+                    q.completedAt = null;
+                    changed = true;
+                }
+            }
+        }
+        if (changed) save();
     }
     
-    // Public API
     return {
-        load: load,
-        save: save,
-        add: add,
-        complete: complete,
-        remove: remove,
-        getAll: getAll,
-        calcReward: calcReward,
-        // Export config cho debug
-        getRewardConfig: function() { return JSON.parse(JSON.stringify(REWARD_CONFIG)); }
+        load: load, save: save, add: add, complete: complete, 
+        remove: remove, getAll: getAll, calcReward: calcReward,
+        checkDailyResets: checkDailyResets // Export hàm
     };
 })();

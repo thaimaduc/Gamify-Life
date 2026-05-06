@@ -27,20 +27,31 @@
             <section class="col-center" id="quest-section">
                 <h2>📜 Quests</h2>
                 <form id="quest-form">
-                    <input type="text" id="quest-title" placeholder="Tên nhiệm vụ..." required>
-                    <select id="quest-stat" title="Hệ năng lực">
-                        <option value="str">⚔️ STR</option>
-                        <option value="agi">🪽 AGI</option>
-                        <option value="int">🧠 INT</option>
-                        <option value="vit">❤️ VIT</option>
-                        <option value="lck">🍀 LCK</option>
-                    </select>
-                    <select id="quest-difficulty" title="Độ khó">
-                        <option value="easy">Dễ</option>
-                        <option value="medium" selected>Vừa</option>
-                        <option value="hard">Khó</option>
-                    </select>
-                    <button type="submit">➕ Tạo</button>
+                    <div class="quest-form-row">
+                        <input type="text" id="quest-title" placeholder="Tên nhiệm vụ..." required>
+                        
+                        <!-- 💡 MỚI: Chọn loại Task -->
+                        <select id="quest-type" title="Loại nhiệm vụ">
+                            <option value="adhoc" selected>Một lần (Ad-hoc)</option>
+                            <option value="daily">Hàng ngày (Daily)</option>
+                        </select>
+                        
+                        <select id="quest-difficulty" title="Độ khó">
+                            <option value="easy">Dễ</option>
+                            <option value="medium" selected>Vừa</option>
+                            <option value="hard">Khó</option>
+                        </select>
+                        <button type="submit">➕ Tạo</button>
+                    </div>
+                    
+                    <!-- 💡 MỚI: Cho phép chọn nhiều Stats cùng lúc -->
+                    <div class="stat-toggles" id="quest-stat-toggles">
+                        <label class="stat-toggle"><input type="checkbox" value="str" checked> ⚔️ STR</label>
+                        <label class="stat-toggle"><input type="checkbox" value="agi"> 🪽 AGI</label>
+                        <label class="stat-toggle"><input type="checkbox" value="int"> 🧠 INT</label>
+                        <label class="stat-toggle"><input type="checkbox" value="vit"> ❤️ VIT</label>
+                        <label class="stat-toggle"><input type="checkbox" value="lck"> 🍀 LCK</label>
+                    </div>
                 </form>
                 <ul id="quest-list"></ul>
             </section>

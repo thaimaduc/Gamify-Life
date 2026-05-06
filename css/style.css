@@ -613,3 +613,45 @@
     margin-bottom: 0.5rem;
     text-align: center;
 }
+/* ===== CSS mới cho Multi-Stats & Task Types ===== */
+.quest-form-row {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; width: 100%; margin-bottom: 0.75rem;
+}
+.quest-form-row input[type="text"] { flex: 1; min-width: 150px; }
+
+/* Các nút bấm chọn Stat (Multi-select) */
+.stat-toggles {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; width: 100%;
+}
+.stat-toggle {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #0f3460;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: #a0a0b0;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+}
+.stat-toggle input { display: none; /* Ẩn ô vuông checkbox mặc định */ }
+
+/* Hiệu ứng khi được chọn */
+.stat-toggle:has(input:checked) {
+    background: rgba(0, 212, 255, 0.15);
+    border-color: #00d4ff;
+    color: #fff;
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.2);
+}
+
+/* Badge hiển thị loại Task (Daily/Ad-hoc) */
+.quest-type-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.quest-type-badge.daily { color: #facc15; background: rgba(250, 204, 21, 0.1); border-color: #facc15; }
+.quest-type-badge.adhoc { color: #a0a0b0; }
