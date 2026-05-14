@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gamify Life</title>
     <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/style.css?v=6">
+    <link rel="stylesheet" href="css/style.css?v=10">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Gamify Life</h1>
+            <h1>GAMIFY LIFE</h1>
             <p>🎮</p>
         </header>
         
@@ -29,7 +29,7 @@
             <aside class="col-left tab-content" id="tab-profile">
                 <div id="stats">Đang tải...</div>
                 
-                <div id="radar-container">
+                <div id="radar-container" class="card-game">
                     <div class="radar-title">📊 Chỉ số cơ bản</div>
                 </div>
                 
@@ -39,17 +39,17 @@
             <!-- 📜 TAB 2: NHIỆM VỤ -->
             <section class="col-center tab-content active" id="tab-quests">
                 
-                <div class="quest-creation-card">
+                <div class="quest-creation-card card-game">
                     <h2>➕ Phân Công Nhiệm Vụ</h2>
                     <form id="quest-form">
-                        <input type="text" id="quest-title" placeholder="Bạn muốn hoàn thành việc gì hôm nay?..." required>
+                        <input type="text" id="quest-title" class="input-game" placeholder="Bạn muốn hoàn thành việc gì hôm nay?..." required>
                         
                         <div class="quest-form-row">
-                            <select id="quest-type" title="Loại nhiệm vụ">
+                            <select id="quest-type" class="input-game" title="Loại nhiệm vụ">
                                 <option value="adhoc" selected>🎯 Một lần (Ad-hoc)</option>
                                 <option value="daily">🔁 Hàng ngày (Daily)</option>
                             </select>
-                            <select id="quest-difficulty" title="Độ khó">
+                            <select id="quest-difficulty" class="input-game" title="Độ khó">
                                 <option value="easy">Dễ (x1)</option>
                                 <option value="medium" selected>Vừa (x2)</option>
                                 <option value="hard">Khó (x3)</option>
@@ -67,11 +67,11 @@
                             </div>
                         </div>
                         
-                        <button type="submit" class="btn-create-quest">🚀 Tạo Nhiệm Vụ</button>
+                        <button type="submit" class="btn-create-quest btn-game">🚀 Tạo Nhiệm Vụ</button>
                     </form>
                 </div>
 
-                <div class="quest-board-card">
+                <div class="quest-board-card card-game">
                     <h2>📜 Bảng Nhiệm Vụ</h2>
                     <ul id="quest-list"></ul>
                 </div>
@@ -79,7 +79,7 @@
 
             <!-- 🏆 TAB 3: THÀNH TỰU -->
             <aside class="col-right tab-content" id="tab-achievements">
-                <div id="gamification-section">
+                <div id="gamification-section" class="card-game">
                     <div id="streak-display">🔥 Streak: <span id="streak-value">0</span> ngày</div>
                     <div id="title-display">🎖 <span id="user-title">Tập Sự</span></div>
                     
@@ -91,25 +91,25 @@
             <!-- 🛒 TAB 4: CỬA HÀNG -->
             <section class="col-center tab-content" id="tab-shop">
                 
-                <div class="quest-creation-card" style="margin-bottom: 1.5rem;">
+                <div class="quest-creation-card card-game" style="margin-bottom: 1.5rem;">
                     <h2 style="display: flex; align-items: center; gap: 8px; text-transform: uppercase;">
                         <span style="color: #a855f7;">➕</span> Thêm Phần Thưởng Mới
                     </h2>
                     <form id="shop-form-add" style="margin-top: 15px;">
                         <!-- Dòng 1: Tên vật phẩm -->
-                        <input type="text" id="new-item-name" placeholder="Tên phần thưởng (VD: Xem phim 1 tập)..." required>
+                        <input type="text" id="new-item-name" class="input-game" placeholder="Tên phần thưởng (VD: Xem phim 1 tập)..." required>
                         
                         <!-- Dòng 2: Giá và Icon -->
                         <div class="shop-form-row">
-                            <input type="number" id="new-item-price" placeholder="Giá (VD: 200)" required min="1" style="flex: 1;">
-                            <input type="text" id="new-item-icon" value="🎁" title="Emoji Icon" style="width: 80px; text-align: center;">
+                            <input type="number" id="new-item-price" class="input-game" placeholder="Giá (VD: 200)" required min="1" style="flex: 1;">
+                            <input type="text" id="new-item-icon" class="input-game input-small" value="🎁" title="Emoji Icon" style="width: 80px; text-align: center;">
                         </div>
 
-                        <button type="submit" class="btn-create-quest">🛒 THÊM LÊN KỆ</button>
+                        <button type="submit" class="btn-create-quest btn-game">🛒 THÊM LÊN KỆ</button>
                     </form>
                 </div>
 
-                <div class="quest-board-card">
+                <div class="quest-board-card card-game">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                         <h2 style="text-transform: uppercase;">🛒 Chợ Đen Phần Thưởng</h2>
                         <div style="font-size: 1.25rem; font-weight: bold; color: #facc15;">💰 <span id="gold-display">0</span></div>
@@ -124,16 +124,16 @@
 
             <!-- ⚙️ TAB 5: CÀI ĐẶT -->
             <section class="col-center tab-content" id="tab-settings">
-                <div class="quest-creation-card">
+                <div class="quest-creation-card card-game">
                     <h2>⚙️ Quản lý Dữ liệu</h2>
                     <p style="color: #a0a0b0; font-size: 0.9rem; margin-bottom: 1.5rem;">Bảo hiểm nhân thọ cho công sức cày cuốc của bạn.</p>
                     
-                    <button id="btn-export" class="btn-create-quest" style="margin-bottom: 1rem; background: linear-gradient(135deg, #10b981, #047857);">📥 Xuất Dữ Liệu (Backup)</button>
+                    <button id="btn-export" class="btn-create-quest btn-game" style="margin-bottom: 1rem; background: linear-gradient(135deg, #10b981, #047857);">📥 Xuất Dữ Liệu (Backup)</button>
                     
                     <div style="border-top: 1px solid #0f3460; padding-top: 1rem; margin-top: 1rem;">
                         <label style="color: #eaeaea; font-weight: bold; display: block; margin-bottom: 0.5rem;">📤 Nhập Dữ Liệu (Phục hồi):</label>
                         <input type="file" id="import-file" accept=".json" style="color: #a0a0b0; margin-bottom: 1rem;">
-                        <button id="btn-import" class="btn-create-quest" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">Cập Nhật Dữ Liệu Mới</button>
+                        <button id="btn-import" class="btn-create-quest btn-game" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">Cập Nhật Dữ Liệu Mới</button>
                     </div>
                 </div>
             </section>

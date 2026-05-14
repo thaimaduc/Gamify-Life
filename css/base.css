@@ -3,7 +3,7 @@
 
 /* ===== Base Styles ===== */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Beaufort', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background-color: #1a1a2e;
     color: #eaeaea;
     min-height: 100vh;
@@ -44,8 +44,8 @@ body {
 }
 
 /* ===== Components ===== */
-header { text-align: center; margin-bottom: 2rem; }
-header h1 { font-size: 2rem; color: #00d4ff; margin-bottom: 0.25rem; }
+header { font-family: 'Beaufort'; text-align: center; margin-bottom: 2rem; }
+header h1 { font-family: 'Beaufort'; font-size: 2rem; color: var(--color-gold-accent); margin-bottom: 0.25rem; }
 header p { font-size: 0.9rem; color: #a0a0b0; }
 
 #stats {

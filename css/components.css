@@ -1,0 +1,248 @@
+/* ===== 🎮 COMPONENTS.CSS - LoL Client UI Colors (HARDCODED) ===== */
+/* ⚠️ Dùng màu cứng để đảm bảo giống 100% artifact cũ */
+
+/* ─────────────────────────────────────────────────────
+   🔹 CARD NỀN KÍNH - Màu chuẩn #16213e
+   ───────────────────────────────────────────────────── */
+.card-game {
+    background: #16213e;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    border: 1px solid #0f3460;
+}
+.card-game::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(0, 212, 255, 0.3) 50%, transparent 100%);
+}
+
+/* ─────────────────────────────────────────────────────
+   🔹 FORM INPUTS - Màu #1a1a2e + border #0f3460
+   ───────────────────────────────────────────────────── */
+.input-game {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #0f3460;
+    background: #1a1a2e;
+    color: #eaeaea;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+.input-game::placeholder { color: #a0a0b0; }
+.input-game:focus {
+    border-color: #00d4ff;
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+    background: #16213e;
+}
+.input-small { width: 80px !important; text-align: center; padding: 0.75rem 0.5rem; }
+.input-row { display: flex; gap: 0.75rem; width: 100%; flex-wrap: wrap; margin-bottom: 1rem; }
+.input-row select {
+    flex: 1; min-width: 120px; padding-right: 32px; cursor: pointer;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0a0b0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center;
+}
+.input-row select option { background: #1a1a2e; color: #eaeaea; }
+
+/* ─────────────────────────────────────────────────────
+   🔹 BUTTONS - Gradient chuẩn #7b2ff7 → #00d4ff
+   ───────────────────────────────────────────────────── */
+.btn-game {
+    width: 100%; padding: 0.75rem 1.5rem; border-radius: 8px;
+    font-weight: 600; font-family: inherit; cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: none; display: inline-flex; align-items: center;
+    justify-content: center; gap: 0.5rem; font-size: 0.9rem;
+    white-space: nowrap; color: white;
+}
+.btn-game:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(123, 47, 247, 0.4); }
+.btn-game:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* Biến thể màu - giữ nguyên gradient artifact cũ */
+.btn-gold {
+    background: linear-gradient(135deg, #7b2ff7, #00d4ff);
+}
+.btn-green { background: #10b981; }
+.btn-red { background: #ef4444; }
+.btn-outline {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #eaeaea;
+}
+
+/* ─────────────────────────────────────────────────────
+   🔹 TITLES - Màu chữ chuẩn
+   ───────────────────────────────────────────────────── */
+.section-title {
+    font-size: 1.25rem; text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 1rem; font-weight: 600; color: #00d4ff;
+}
+.section-title.gold { color: #c8aa6e; }
+.section-title.gray { color: #a0a0b0; }
+
+/* ─────────────────────────────────────────────────────
+   🔹 BADGES - Màu chuẩn artifact cũ
+   ───────────────────────────────────────────────────── */
+.badge {
+    display: inline-block; padding: 0.25rem 0.5rem; border-radius: 4px;
+    font-size: 0.75rem; font-weight: 600;
+}
+.badge-cyan { background: rgba(123, 47, 247, 0.2); color: #00d4ff; }
+.badge-green { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+.badge-yellow { background: rgba(234, 179, 8, 0.2); color: #facc15; }
+.badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+.badge-ghost { background: rgba(26, 48, 64, 0.25); color: #a0a0b0; border: 1px solid #0f3460; }
+
+/* ─────────────────────────────────────────────────────
+   🔹 QUEST CARD - Border-left màu tím chuẩn
+   ───────────────────────────────────────────────────── */
+.quest-card {
+    background: #16213e;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    display: flex; flex-direction: column; gap: 0.75rem;
+    transition: transform 0.2s, opacity 0.3s;
+    border-left: 4px solid #7b2ff7;
+}
+.quest-card:hover { transform: translateX(4px); }
+.quest-card.done {
+    opacity: 0.6; text-decoration: line-through;
+    border-left-color: #10b981; background: #0f3460;
+}
+
+/* ─────────────────────────────────────────────────────
+   🔹 STREAK & TITLE BOX - Gradient artifact cũ
+   ───────────────────────────────────────────────────── */
+.streak-box {
+    padding: 1rem; border-radius: 8px; font-weight: 600; text-align: center;
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: #2d3436;
+}
+.title-box {
+    padding: 1rem; border-radius: 8px; font-weight: 600; text-align: center;
+    background: linear-gradient(135deg, #7b2ff7, #00d4ff);
+    color: white;
+}
+
+/* ─────────────────────────────────────────────────────
+   🔹 BADGE CARD (Thành tựu)
+   ───────────────────────────────────────────────────── */
+.badge-card {
+    background: #16213e;
+    border: 2px solid #0f3460;
+    border-radius: 8px;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.3s;
+}
+.badge-card.unlocked {
+    border-color: #00d4ff;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+}
+.badge-card.locked { opacity: 0.5; }
+.badge-card.locked .badge-icon { filter: grayscale(1); opacity: 0.5; }
+.badge-icon { font-size: 1.5rem; margin-bottom: 0.25rem; display: block; }
+.badge-name { font-size: 0.75rem; color: #eaeaea; }
+
+/* ─────────────────────────────────────────────────────
+   🔹 TOAST NOTIFICATION
+   ───────────────────────────────────────────────────── */
+.toast {
+    background: #16213e; color: #eaeaea;
+    padding: 0.75rem 1rem; border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    display: flex; align-items: center; gap: 0.5rem;
+    animation: slideIn 0.3s ease-out;
+    border-left: 4px solid #7b2ff7;
+}
+.toast.success { border-left-color: #10b981; }
+.toast.levelup { border-left-color: #facc15; background: #1e1a3a; }
+.toast.badge { border-left-color: #00d4ff; background: #1a233a; }
+.toast.streak { border-left-color: #ff6b6b; }
+.toast.hide { animation: slideOut 0.3s ease-in forwards; }
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+
+/* ─────────────────────────────────────────────────────
+   🔹 LEVEL UP MODAL - Gradient chuẩn artifact
+   ───────────────────────────────────────────────────── */
+.levelup-modal {
+    background: linear-gradient(135deg, #7b2ff7, #00d4ff);
+    padding: 2rem; border-radius: 16px; text-align: center; color: white;
+    max-width: 360px; width: 90%; animation: pulse 1.5s infinite;
+}
+.levelup-title { font-size: 2rem; margin-bottom: 0.5rem; }
+.levelup-level { font-size: 1.5rem; font-weight: bold; margin-bottom: 0.25rem; }
+.levelup-title-text { font-size: 1rem; opacity: 0.9; margin-bottom: 1.5rem; }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+
+/* ─────────────────────────────────────────────────────
+   🔹 UTILITIES - Class tiện ích (xoá inline style)
+   ───────────────────────────────────────────────────── */
+.flex { display: flex; }
+.flex-between { justify-content: space-between; align-items: center; }
+.flex-center { align-items: center; }
+.flex-wrap { flex-wrap: wrap; }
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: 1rem; }
+.mb-2 { margin-bottom: 1.5rem; }
+.mt-1 { margin-top: 1rem; }
+.mt-2 { margin-top: 1.5rem; }
+.pt-1 { padding-top: 1rem; }
+.text-muted { color: #a0a0b0; }
+.text-sm { font-size: 0.9rem; }
+.text-xs { font-size: 0.8rem; }
+.text-bold { font-weight: 600; }
+.text-center { text-align: center; }
+.text-uppercase { text-transform: uppercase; }
+.block { display: block; }
+.hidden { display: none !important; }
+.border-top-glow {
+    position: relative; border-top: 1px solid #0f3460;
+}
+
+/* ─────────────────────────────────────────────────────
+   🔹 STAT TOGGLES
+   ───────────────────────────────────────────────────── */
+.stat-toggles-container { margin-bottom: 1.25rem; }
+.stat-toggles-label {
+    font-size: 0.8rem; color: #a0a0b0; margin-bottom: 0.5rem;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+}
+.stat-toggles { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.stat-toggle {
+    background: rgba(26, 48, 64, 0.3); border: 1px solid #0f3460;
+    padding: 0.5rem 0.85rem; border-radius: 8px;
+    font-size: 0.8rem; color: #a0a0b0; cursor: pointer;
+    transition: all 0.2s ease; user-select: none;
+    display: flex; align-items: center;
+}
+.stat-toggle input[type="checkbox"] { display: none !important; }
+.stat-toggle:has(input:checked) {
+    background: rgba(0, 212, 255, 0.15); border-color: #00d4ff;
+    color: #00d4ff; box-shadow: 0 0 8px rgba(0, 212, 255, 0.2); font-weight: 600;
+}
+
+/* ─────────────────────────────────────────────────────
+   🔹 RESPONSIVE
+   ───────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+    .input-row { flex-direction: column; }
+    .input-row select { width: 100%; }
+}
+@media (max-width: 480px) {
+    .card-game { padding: 1.25rem; }
+    .section-title { font-size: 1.1rem; }
+    .btn-game { padding: 0.75rem 1rem; font-size: 0.85rem; }
+}
