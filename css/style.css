@@ -85,109 +85,290 @@ body {
 
 /* =============================================== */
 
-/* =============== TABS NAVIGATION =============== */
+/* =============================================
+   LoL-Style Navigation Bar - FIXED LAYOUT
+   ============================================= */
 
+.lol-desktop-nav {
+  display: flex;
+  align-items: center; /* Căn giữa theo chiều dọc */
+  justify-content: flex-start;
+  height: 56px; /* Tăng height lên cho cân đối */
+  background: linear-gradient(180deg, #1e2328 0%, #0a1428 100%);
+  border-bottom: 1px solid var(--lol-border-gold);
+  position: relative;
+  z-index: 10;
+  margin: 0;
+  padding: 0 20px; /* Padding đều 2 bên */
+  gap: 0; /* Không gap giữa các section */
+}
 
-.dashboard-layout { 
-  display: block !important; 
-  max-width: 100%; 
-  margin: 0 auto; 
-  width: 100%; 
-  padding: 1rem; 
+.lol-desktop-nav::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(200, 170, 110, 0.3) 20%,
+    var(--lol-gold) 50%,
+    rgba(200, 170, 110, 0.3) 80%,
+    transparent 100%);
 }
-.app-nav {
-    display: flex; 
-    justify-content: center;
-    align-items: stretch;
-    gap: 0rem;
-    margin: 0 auto 1.5rem auto; 
-    max-width: 100%;
-    background: var(--gradient-nav); 
-    backdrop-filter: blur(12px); 
-    -webkit-backdrop-filter: blur(12px);
-    padding: 0rem; 
-    border-radius: var(--radius-na); 
-    border: var(--border-gold);
-    box-shadow: var(--shadow-md), var(--shadow-gold); 
-    position: relative;
+
+/* Brand Section */
+.nav-brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 100%;
+  padding: 0 20px;
+  border-right: 1px solid var(--lol-border-gold);
+  background: linear-gradient(90deg, rgba(200, 170, 110, 0.05), transparent);
+  flex-shrink: 0; /* Không co lại */
 }
-.app-nav::before {
-    content: ''; 
-    position: absolute; 
-    top: 0; 
-    left: 0; 
-    right: 0; 
-    height: 1px;
-    background: linear-gradient(90deg, transparent 0%, rgba(200, 170, 110, 0.35) 50%, transparent 100%); 
+
+.nav-brand-icon {
+  width: 32px; /* Tăng kích thước logo */
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.nav-btn {
-    flex: 1;
-    background: transparent;
-    color: var(--text-muted);
-    border: 0px solid transparent;
-    padding: 0.75rem 0.5rem;
-    border-radius: var(--radius-na);
-    font-family: 'Beaufort';
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all var(--transition-base);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    position: relative;
-    min-height: 60px;
-    justify-content: center;
-    text-align: center;
-    transition: background-color 0.3s ease, 
-                color 0.3s ease, 
-                box-shadow 0.3s ease,
-                border-color 0.3s ease;
-    outline: none !important;
-    -webkit-tap-highlight-color: transparent;        
+
+.nav-brand-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
-.nav-btn::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
-    border-radius: var(--radius-md);
+
+.nav-brand-text {
+  font-family: 'Beaufort', serif;
+  font-size: 16px; /* Tăng font size */
+  font-weight: 700;
+  color: var(--lol-gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: var(--lol-glow-gold);
+  white-space: nowrap;
+  line-height: 1; /* Fix line height */
 }
-.nav-btn.active {
-    background: transparent;
-    color: var(--text-primary);
-    border: none;
-    border-bottom: 1px solid rgba(200, 170, 110, 0.35);
-    text-shadow: none;
+
+/* Tabs Container */
+.nav-tabs-container {
+  flex: 1; /* Chiếm không gian còn lại */
+  display: flex;
+  align-items: center; /* Căn giữa tabs */
+  height: 100%;
+  padding: 0;
+  margin: 0 20px; /* Margin 2 bên */
+}
+
+.lol-nav-tab {
+  position: relative;
+  padding: 0 24px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Beaufort', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--lol-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-left: 1px solid rgba(200, 170, 110, 0.1);
+  border-right: 1px solid rgba(200, 170, 110, 0.1);
+  margin: 0 -1px;
+  background: transparent;
+  border: none;
+  outline: none;
+  white-space: nowrap;
+  line-height: 1; /* Fix line height */
+}
+
+.lol-nav-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--lol-gold);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lol-nav-tab::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(200, 170, 110, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lol-nav-tab:hover {
+  color: var(--lol-gold-light);
+}
+
+.lol-nav-tab:hover::after {
+  opacity: 1;
+}
+
+.lol-nav-tab.active {
+  color: var(--lol-gold);
+  background: linear-gradient(180deg, rgba(200, 170, 110, 0.08), rgba(10, 50, 60, 0.3));
+}
+
+.lol-nav-tab.active::before {
+  opacity: 1;
+}
+
+.lol-nav-tab.active::after {
+  opacity: 1;
+}
+
+.lol-nav-tab .tab-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+  color: var(--lol-text-secondary);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.lol-nav-tab.active .tab-icon {
+  opacity: 1;
+  color: var(--lol-gold);
+  filter: drop-shadow(0 0 4px rgba(200, 170, 110, 0.5));
+}
+
+.lol-nav-tab .tab-text {
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* Right Section */
+.nav-right-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+  padding: 0 20px;
+  border-left: 1px solid var(--lol-border-gold);
+  flex-shrink: 0; /* Không co lại */
+}
+
+.lol-currency {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--lol-border-gold);
+  border-radius: 2px;
+  height: 36px; /* Fixed height */
+}
+
+.lol-currency .currency-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.lol-currency .currency-value {
+  font-family: 'Beaufort', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--lol-gold);
+  line-height: 1;
+}
+
+.lol-avatar {
+  width: 36px; /* Tăng kích thước */
+  height: 36px;
+  border: 2px solid var(--lol-gold);
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--lol-bg-secondary), var(--lol-bg-primary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Beaufort', serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--lol-gold);
+  cursor: pointer;
+  box-shadow: var(--lol-glow-gold);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.lol-avatar:hover {
+  box-shadow: 0 0 20px rgba(200, 170, 110, 0.4);
+  border-color: var(--lol-gold-light);
+}
+
+/* Dashboard Layout - Fix content alignment */
+.dashboard-layout {
+  display: grid !important;
+  grid-template-columns: 320px 1fr 300px; /* 3 columns rõ ràng */
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr; /* 1 column trên mobile */
+  }
   
+  .lol-nav-tab {
+    padding: 0 16px;
+    font-size: 11px;
+  }
+  
+  .nav-brand-text {
+    font-size: 14px;
+  }
 }
-.nav-btn.active::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100%;
-    background: linear-gradient(0deg, var(--color-gold-glow), transparent 70%);
-    border-radius: var(--radius-na);
+
+@media (max-width: 768px) {
+  .lol-desktop-nav {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px;
+  }
+  
+  .nav-brand-section {
+    width: 100%;
+    padding: 0 10px;
+    margin-bottom: 10px;
+  }
+  
+  .nav-tabs-container {
+    width: calc(100% - 100px);
+    margin: 0;
+  }
+  
+  .lol-nav-tab {
+    padding: 0 12px;
+    font-size: 10px;
+  }
+  
+  .nav-right-section {
+    padding: 0 10px;
+  }
 }
-.nav-btn:hover:not(.active) {
-    background: var(--bg-hover);
-    color: var(--text-primary);
-    border-color: rgba(200, 170, 110, 0.12);
-}
-.tab-content { 
-    display: none; 
-    animation: fadeInTab 0.4s ease-out; 
-}
-.tab-content.active { 
-    display: block; 
-}
-@keyframes fadeInTab { 
-    from { opacity: 0; transform: translateY(12px); } 
-    to { opacity: 1; transform: translateY(0); } }
 
 /* =============================================== */
 

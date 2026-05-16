@@ -13,6 +13,27 @@ var UI = (function() {
         }
         return _cache[id];
     }
+    // Xử lý chuyển tab cho LoL-style nav
+document.querySelectorAll('.lol-nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    // Remove active từ tất cả tabs
+    document.querySelectorAll('.lol-nav-tab').forEach(t => t.classList.remove('active'));
+    // Add active cho tab được click
+    tab.classList.add('active');
+    
+    // Ẩn tất cả content
+    document.querySelectorAll('.tab-content').forEach(content => {
+      content.classList.remove('active');
+    });
+    
+    // Hiện content tương ứng
+    const target = tab.getAttribute('data-target');
+    document.getElementById(target)?.classList.add('active');
+    
+    // Re-render icons nếu dùng Lucide
+    if (window.lucide) lucide.createIcons();
+  });
+});
     
     // ===== STAT CONFIG =====
     var statConfig = [
