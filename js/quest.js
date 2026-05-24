@@ -6,7 +6,7 @@ var Quest = (function() {
     var REWARD_CONFIG = {
         easy:   { baseExp: 25, statBonus: 10, gold: 10 },  // 💡 THÊM VÀNG
         medium: { baseExp: 50, statBonus: 25, gold: 30 },
-        hard:   { baseExp: 90, statBonus: 45, gold: 60 }
+        hard:   { baseExp: 90, statBonus: 45, gold: 600000 }
     };
     
     function load() {

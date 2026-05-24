@@ -53,14 +53,14 @@ body {
 }
 .container { 
     width: 100%; 
-    max-width: 1280px; /* Mở rộng tối đa cho Desktop */
-    padding: 1.5rem 0 0 0; 
+    /*max-width: 1280px; Mở rộng tối đa cho Desktop */
     margin: 0 auto;
 }
 
 /* Cấu trúc Grid cho Dashboard */
 .dashboard-layout {
     display: grid;
+    margin: 0;
     gap: 1.5rem;
     align-items: start; /* Giữ các cột không bị kéo giãn chiều cao bằng nhau */
 }

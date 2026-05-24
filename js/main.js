@@ -19,6 +19,7 @@
             allocPointsDisplay: document.getElementById('alloc-points'),
             radarContainer: document.getElementById('radar-container'),
             goldDisplay: document.getElementById('gold-display'),
+            navGoldDisplay: document.getElementById('nav-gold-display'),
             shopList: document.getElementById('shop-list'),
             shopFormAdd: document.getElementById('shop-form-add') // 💡 MỚI
         };
@@ -46,7 +47,12 @@
             els.allocPointsDisplay.className = user.allocPoints > 0 ? 'highlight' : '';
         }
         
-        if (els.goldDisplay) els.goldDisplay.textContent = user.gold || 0;
+        // 🛠️ SỬA KHU VỰC NÀY: Bọc hàm formatGold vào trước số tiền
+        var goldString = formatGold(user.gold);
+        
+        if (els.goldDisplay) els.goldDisplay.textContent = goldString;       /* Tiền ở Chợ Đen */
+        if (els.navGoldDisplay) els.navGoldDisplay.textContent = goldString; /* Tiền trên Nav PC */
+        if (els.mobileGoldDisplay) els.mobileGoldDisplay.textContent = goldString; /* Tiền trong Menu Mobile (Nếu dùng Cách 3) */
         
         UI.renderBadges(State.getBadges());
         renderQuestList();
@@ -391,6 +397,24 @@
     
     function capitalize(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    // 🛠️ THÊM HÀM NÀY: Hàm rút gọn số vàng chuẩn Client Game
+    function formatGold(num) {
+        if (!num || isNaN(num)) return '0';
+        
+        // Nếu vàng từ 1 Triệu trở lên (Ví dụ: 1.200.000 -> 1.2M)
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+        }
+        
+        // Nếu vàng từ 1 Nghìn trở lên (Ví dụ: 606100 -> 606.1K, 606000 -> 606K)
+        if (num >= 1000) {
+            return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+        }
+        
+        // Dưới 1000 thì giữ nguyên số gốc
+        return num.toString();
     }
     
     // ===== START =====

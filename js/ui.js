@@ -200,6 +200,63 @@ document.querySelectorAll('.lol-nav-tab').forEach(tab => {
             }
         }, 4000);
     }
+
+    // ===== MOBILE MENU TOGGLE LOGIC =====
+(function initMobileMenu() {
+  var toggle = document.getElementById('mobile-menu-toggle');
+  var dropdown = document.getElementById('mobile-tabs-dropdown');
+  
+  if (!toggle || !dropdown) return;
+  
+  // 1. Bấm nút menu → mở/đóng dropdown
+  toggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    dropdown.classList.toggle('active');
+    
+    // Đổi icon menu ↔ close
+    var icon = toggle.querySelector('.menu-icon');
+    if (dropdown.classList.contains('active')) {
+      icon.setAttribute('data-lucide', 'x');
+    } else {
+      icon.setAttribute('data-lucide', 'menu');
+    }
+    if (window.lucide) lucide.createIcons();
+  });
+  
+  // 2. Bấm vào tab trong dropdown → chuyển tab + đóng menu
+  dropdown.querySelectorAll('.mobile-tab-item').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      // Cập nhật active state cho cả desktop tabs (để đồng bộ)
+      document.querySelectorAll('.lol-nav-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      var desktopTab = document.querySelector('.nav-tabs-container .lol-nav-tab[data-target="' + tab.dataset.target + '"]');
+      if (desktopTab) desktopTab.classList.add('active');
+      
+      // Chuyển content
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      var target = tab.getAttribute('data-target');
+      document.getElementById(target)?.classList.add('active');
+      
+      // Đóng dropdown + reset icon
+      dropdown.classList.remove('active');
+      var icon = toggle.querySelector('.menu-icon');
+      icon.setAttribute('data-lucide', 'menu');
+      if (window.lucide) lucide.createIcons();
+    });
+  });
+  
+  // 3. Bấm ra ngoài → đóng dropdown
+  document.addEventListener('click', function(e) {
+    if (dropdown.classList.contains('active') && 
+        !dropdown.contains(e.target) && 
+        !toggle.contains(e.target)) {
+      dropdown.classList.remove('active');
+      var icon = toggle.querySelector('.menu-icon');
+      icon.setAttribute('data-lucide', 'menu');
+      if (window.lucide) lucide.createIcons();
+    }
+  });
+})();
     
     // ===== PUBLIC API =====
     return {
@@ -211,4 +268,5 @@ document.querySelectorAll('.lol-nav-tab').forEach(tab => {
         showToast: showToast,
         showLevelUpAnimation: showLevelUpAnimation
     };
+
 })();

@@ -10,55 +10,75 @@
 <body>
     <div class="container">
         
-        <!-- ===== THANH ĐIỀU HƯỚNG TABS ===== -->
         <!-- ===== THANH ĐIỀU HƯỚNG TABS - LoL STYLE ===== -->
+<!-- ===== THANH ĐIỀU HƯỚNG - LoL STYLE (Responsive) ===== -->
 <nav class="lol-desktop-nav">
-  <!-- Brand Section -->
+  
+  <!-- 🔘 Nút Menu Mobile (chỉ hiện trên mobile) -->
+  <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Mở menu">
+    <i data-lucide="menu" class="menu-icon"></i>
+  </button>
+
+  <!-- 🏷️ Brand Section (giữ nguyên, sẽ căn giữa trên mobile) -->
   <div class="nav-brand-section">
     <div class="nav-brand-icon">
-      <img src="images/nav-brand-icon.png" >
+      <img src="images/nav-brand-icon.png" alt="Logo">
     </div>
     <span class="nav-brand-text">GAMIFY LIFE</span>
   </div>
 
-  <!-- Tabs Container -->
-  <div class="nav-tabs-container">
+  <!-- 📑 Tabs Container (Desktop - ẩn trên mobile) -->
+  <div class="nav-tabs-container lol-hide-on-mobile">
     <button class="lol-nav-tab" data-target="tab-profile">
-      <i data-lucide="user" class="tab-icon"></i>
       <span class="tab-text">Hồ sơ</span>
     </button>
     <button class="lol-nav-tab active" data-target="tab-quests">
-      <i data-lucide="sword" class="tab-icon"></i>
       <span class="tab-text">Nhiệm vụ</span>
     </button>
     <button class="lol-nav-tab" data-target="tab-achievements">
-      <i data-lucide="trophy" class="tab-icon"></i>
       <span class="tab-text">Thành tựu</span>
     </button>
     <button class="lol-nav-tab" data-target="tab-shop">
-      <i data-lucide="shopping-bag" class="tab-icon"></i>
       <span class="tab-text">Cửa hàng</span>
     </button>
     <button class="lol-nav-tab" data-target="tab-settings">
-      <i data-lucide="settings" class="tab-icon"></i>
       <span class="tab-text">Cài đặt</span>
     </button>
   </div>
 
-  <!-- Right Section (Optional: Gold/Avatar) -->
+  <!-- 💰 Right Section (Currency + Avatar) -->
   <div class="nav-right-section">
     <div class="lol-currency">
-      <svg class="currency-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-        <circle cx="7" cy="7" r="6" stroke="var(--lol-gold)" stroke-width="1"/>
-        <text x="7" y="10" text-anchor="middle" fill="var(--lol-gold)" 
-              font-size="8" font-weight="bold" font-family="sans-serif">$</text>
-      </svg>
+      <img src="images/currency-icon.png" alt="currency">
       <span class="currency-value" id="nav-gold-display">0</span>
     </div>
     <div class="lol-avatar" title="Profile">GL</div>
   </div>
 </nav>
 
+<!-- 📱 Mobile Dropdown Tabs Panel (ẩn mặc định, sổ ra khi bấm menu) -->
+<div class="mobile-tabs-dropdown" id="mobile-tabs-dropdown">
+  <button class="lol-nav-tab mobile-tab-item" data-target="tab-profile">
+    <i data-lucide="user" class="tab-icon"></i>
+    <span class="tab-text">Hồ sơ</span>
+  </button>
+  <button class="lol-nav-tab mobile-tab-item active" data-target="tab-quests">
+    <i data-lucide="sword" class="tab-icon"></i>
+    <span class="tab-text">Nhiệm vụ</span>
+  </button>
+  <button class="lol-nav-tab mobile-tab-item" data-target="tab-achievements">
+    <i data-lucide="trophy" class="tab-icon"></i>
+    <span class="tab-text">Thành tựu</span>
+  </button>
+  <button class="lol-nav-tab mobile-tab-item" data-target="tab-shop">
+    <i data-lucide="shopping-bag" class="tab-icon"></i>
+    <span class="tab-text">Cửa hàng</span>
+  </button>
+  <button class="lol-nav-tab mobile-tab-item" data-target="tab-settings">
+    <i data-lucide="settings" class="tab-icon"></i>
+    <span class="tab-text">Cài đặt</span>
+  </button>
+</div>
         <main class="dashboard-layout">
             
             <!-- 👤 TAB 1: HỒ SƠ -->
@@ -175,29 +195,6 @@
             </section>
             
         </main>
-    </div>
-
-    <div class="lol-mobile-bottom-nav">
-        <button class="lol-nav-tab" data-target="tab-profile">
-            <i data-lucide="user" class="tab-icon"></i>
-            <span class="tab-text">Hồ sơ</span>
-        </button>
-        <button class="lol-nav-tab active" data-target="tab-quests">
-            <i data-lucide="sword" class="tab-icon"></i>
-            <span class="tab-text">Nhiệm vụ</span>
-        </button>
-        <button class="lol-nav-tab" data-target="tab-achievements">
-            <i data-lucide="trophy" class="tab-icon"></i>
-            <span class="tab-text">Thành tựu</span>
-        </button>
-        <button class="lol-nav-tab" data-target="tab-shop">
-            <i data-lucide="shopping-bag" class="tab-icon"></i>
-            <span class="tab-text">Cửa hàng</span>
-        </button>
-        <button class="lol-nav-tab" data-target="tab-settings">
-            <i data-lucide="settings" class="tab-icon"></i>
-            <span class="tab-text">Cài đặt</span>
-        </button>
     </div>
     
     <!-- Toast & Level Up Overlay -->
