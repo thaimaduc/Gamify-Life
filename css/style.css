@@ -232,7 +232,7 @@ body {
 }
 /*====================================================*/
 
-/* ==============Tabs Container ==============*/
+/* ==============Tabs Container (DONE) ==============*/
 .nav-tabs-container {
   flex: 1;
   display: flex;
@@ -240,19 +240,25 @@ body {
   height: 100%;
   padding: 0;
   margin: 0 0px;
+  /*overflow-x:auto;
+  scrollbar-width: none;*/
+}
+
+.nav-tabs-container::-webkit-scrollbar {
+  display: none; /* Ẩn thanh cuộn trên Chrome, Safari, Edge */
 }
 
 .lol-nav-tab {
   flex: 1;
   position: relative;
-  padding: 0 24px;
+  padding: 0 clamp(12px, 1.8vw, 24px);
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   font-family: "Beaufort", serif;
-  font-size: 16px;
+  font-size: clamp(12px, 1.2vw, 16px);
   font-weight: 700;
   color: var(--lol-text-secondary);
   text-shadow:
@@ -261,7 +267,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 1.5px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0s ease;
   border-left: 1px solid rgba(200, 170, 110, 0.1);
   border-right: 1px solid rgba(200, 170, 110, 0.1);
   margin: 0 -1px;
@@ -305,8 +311,6 @@ body {
     rgba(200, 170, 110, 0.08),
     rgba(10, 50, 60, 0.3)
   );
-  filter: none !important; /* Ép tắt hoàn toàn hiệu ứng phát sáng của hover */
-  transition: none !important;
 }
 
 .lol-nav-tab.active::before {
@@ -336,14 +340,15 @@ body {
   white-space: nowrap;
   line-height: 1;
 }
+/*========================================================*/
 
-/* Right Section */
+/* ===================Right Section ======================*/
 .nav-right-section {
   display: flex;
   align-items: center;
   gap: 16px;
   height: 100%;
-  padding: 0 20px;
+  padding: 0 1.5rem;
   border-left: 1px solid var(--lol-border-gold);
   flex-shrink: 0; /* Không co lại */
 }
@@ -411,46 +416,95 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
-  .dashboard-layout {
-    grid-template-columns: 1fr; /* 1 column trên mobile */
-  }
-
-  .lol-nav-tab {
-    padding: 0 16px;
-    font-size: 11px;
-  }
-
-  .nav-brand-text {
-    font-size: 14px;
-  }
+/* MẶC ĐỊNH TRÊN DESKTOP: Ẩn thanh điều hướng mobile đi */
+.lol-mobile-bottom-nav {
+  display: none;
 }
 
+/* ========================================================
+   CẤU HÌNH KHI TRÊN MÀN HÌNH ĐIỆN THOẠI (DƯỚI 768PX)
+   ======================================================== */
 @media (max-width: 768px) {
+  
+  /* Tạo khoảng trống ở đáy trang để thanh Nav không che mất nội dung */
+  body {
+    padding-bottom: calc(65px + env(safe-area-inset-bottom)) !important;
+  }
+
+  /* Ẩn cụm tab cũ trên thanh header desktop đi cho rộng chỗ */
+  .lol-hide-on-mobile {
+    display: none !important;
+  }
+
+  /* Tinh chỉnh lại thanh header trên đỉnh (chỉ còn Logo Brand + Avatar) */
   .lol-desktop-nav {
-    flex-wrap: wrap;
-    height: auto;
-    padding: 10px;
+    margin: 0 !important;
+    padding: 0 15px !important;
+    height: 50px !important;
+    justify-content: space-between !important;
   }
-
   .nav-brand-section {
-    width: 100%;
-    padding: 0 10px;
-    margin-bottom: 10px;
+    border-right: none !important;
+    padding: 0 !important;
   }
-
-  .nav-tabs-container {
-    width: calc(100% - 100px);
-    margin: 0;
-  }
-
-  .lol-nav-tab {
-    padding: 0 12px;
-    font-size: 10px;
-  }
-
   .nav-right-section {
-    padding: 0 10px;
+    border-left: none !important;
+    padding: 0 !important;
+  }
+  .lol-currency {
+    display: none !important; /* Ẩn bọc tiền tệ trên header mobile */
+  }
+
+
+  /* KÍCH HOẠT THANH ĐIỀU HƯỚNG FIXED DƯỚI ĐÁY MÀN HÌNH CHUẨN MOBI */
+  .lol-mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: calc(60px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+    z-index: 999999 !important; /* Luôn nổi lên trên cùng mọi thành phần */
+    
+    /* Style mang hơi hướng LMHT */
+    background: linear-gradient(0deg, #0a1428 0%, #1e2328 100%) !important;
+    border-top: 1px solid rgba(200, 170, 110, 0.4) !important;
+    box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.9) !important;
+    
+    justify-content: space-around !important;
+    align-items: center !important;
+  }
+
+  /* Định hình lại các nút bấm Tab trên mobile (Icon ở trên - Chữ ở dưới) */
+  .lol-mobile-bottom-nav .lol-nav-tab {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important; 
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100% !important;
+    font-size: 10px !important;
+    letter-spacing: 0.5px !important;
+    color: var(--lol-text-secondary) !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 5px 0 !important;
+  }
+
+  /* Khi tab được click active trên mobile */
+  .lol-mobile-bottom-nav .lol-nav-tab.active {
+    color: var(--lol-gold) !important;
+    background: linear-gradient(180deg, transparent, rgba(200, 170, 110, 0.05)) !important;
+  }
+
+  /* Phóng to nhẹ kích thước icon Lucide trên điện thoại cho dễ bấm */
+  .lol-mobile-bottom-nav .lol-nav-tab .tab-icon {
+    width: 20px !important;
+    height: 20px !important;
+    margin-bottom: 3px !important;
+    display: block !important;
   }
 }
 
