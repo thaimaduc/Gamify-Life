@@ -491,7 +491,7 @@ body {
   .mobile-menu-toggle {
     display: flex;
     align-items: center;
-    flex: 1;
+    flex: none;
     justify-content: flex-start;
   }
 
