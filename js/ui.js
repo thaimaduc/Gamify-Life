@@ -13,6 +13,31 @@ var UI = (function() {
         }
         return _cache[id];
     }
+
+    var avatarFrames = [
+        { maxLevel: 29,  src: "images/frame/Level_1_Summoner_Icon_Border.png" },   // Cấp 1 - 29
+        { maxLevel: 49,  src: "images/frame/Level_30_Summoner_Icon_Border.png" },  // Cấp 30 - 49
+        { maxLevel: 74,  src: "images/frame/Level_50_Summoner_Icon_Border.png" },  // Cấp 50 - 74
+        { maxLevel: 99,  src: "images/frame/Level_75_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 124,  src: "images/frame/Level_100_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 149,  src: "images/frame/Level_125_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 174,  src: "images/frame/Level_150_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 199,  src: "images/frame/Level_175_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 224,  src: "images/frame/Level_200_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 249,  src: "images/frame/Level_225_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 274,  src: "images/frame/Level_250_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 299,  src: "images/frame/Level_275_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 324,  src: "images/frame/Level_300_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 349,  src: "images/frame/Level_325_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 374,  src: "images/frame/Level_350_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 399,  src: "images/frame/Level_375_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 424,  src: "images/frame/Level_400_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 449,  src: "images/frame/Level_425_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 474,  src: "images/frame/Level_450_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: 499,  src: "images/frame/Level_475_Summoner_Icon_Border.png" },  // Cấp 75 - 99
+        { maxLevel: Infinity, src: "images/frame/Level_500_Summoner_Icon_Border.png" } // Cấp 100 trở lên
+    ];
+
     // Xử lý chuyển tab cho LoL-style nav
 document.querySelectorAll('.lol-nav-tab').forEach(tab => {
   tab.addEventListener('click', () => {
@@ -91,12 +116,33 @@ document.querySelectorAll('.lol-nav-tab').forEach(tab => {
             '</p>';
     }
     
+    // ===== RENDER AVATAR FRAME (Đổi khung LoL theo Level) =====
+    function renderAvatarFrame(currentLevel) {
+        var frameEl = _getEl('userFrame'); // Tận dụng hàm cache DOM có sẵn của bạn
+        if (!frameEl) return;
+
+        // Tìm khung phù hợp với level hiện tại
+        var matchedFrame = null;
+        for (var i = 0; i < avatarFrames.length; i++) {
+            if (currentLevel <= avatarFrames[i].maxLevel) {
+                matchedFrame = avatarFrames[i];
+                break;
+            }
+        }
+
+        // Nếu tìm thấy và link ảnh khác link hiện tại thì mới cập nhật (Tránh nạp lại ảnh liên tục)
+        if (matchedFrame && frameEl.getAttribute('src') !== matchedFrame.src) {
+            frameEl.setAttribute('src', matchedFrame.src);
+        }
+    }
+    
     // ===== RENDER ALL (batch render để tránh nhấp nháy) =====
     function renderAll() {
         if (typeof State === 'undefined') return;
         var user = State.getUser();
         renderStats(user.stats);
         renderXP(user.characterLevel, user.totalExp, State.getTotalExpThreshold(), State.getTotalExpProgress());
+        
     }
     
     // ✅ MỚI: Render Radar Chart
@@ -266,7 +312,8 @@ document.querySelectorAll('.lol-nav-tab').forEach(tab => {
         renderRadarChart: renderRadarChart,
         renderBadges: renderBadges,
         showToast: showToast,
-        showLevelUpAnimation: showLevelUpAnimation
+        showLevelUpAnimation: showLevelUpAnimation,
+        renderAvatarFrame: renderAvatarFrame
     };
 
 })();

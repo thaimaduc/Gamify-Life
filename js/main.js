@@ -41,6 +41,7 @@
         UI.renderStats(user.stats);
         UI.renderXP(user.characterLevel, user.totalExp, State.getTotalExpThreshold(), State.getTotalExpProgress());
         UI.renderRadarChart(user.stats);
+        UI.renderAvatarFrame(user.characterLevel);
         
         if (els.allocPointsDisplay) {
             els.allocPointsDisplay.textContent = user.allocPoints;
@@ -372,6 +373,7 @@
             if (charResult.leveledUp === 1) {
                 UI.showLevelUpAnimation(charResult.currentLevel, Reward.getTitleByLevel(charResult.currentLevel));
             }
+            UI.renderAvatarFrame(charResult.currentLevel);
         }
         
         for (var j = 0; j < leveledUpStats.length; j++) {
