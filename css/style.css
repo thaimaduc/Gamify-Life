@@ -209,6 +209,7 @@ body {
   height: 100%;
   display: block;
   object-fit: contain;
+  filter: drop-shadow(0 0 7px rgba(114, 105, 105, 0.697));
 }
 
 .nav-brand-text {
@@ -363,12 +364,23 @@ body {
 }
 
 .lol-currency img {
-  height: clamp(16px, 1.2vw, 24px);
+  height: clamp(13px, 1vw, 16px);
   width: auto;
   aspect-ratio: 347/463;
   display: block;
   object-fit: contain;
   flex-shrink: 0;
+  filter: drop-shadow(0 0 6px rgba(240, 230, 210, 0.6));
+  animation: hextech-pulse 2s infinite ease-in-out;
+}
+
+@keyframes hextech-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px rgba(240, 230, 210, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(240, 230, 210, 0.8));
+  }
 }
 
 .lol-currency .currency-value {
@@ -379,32 +391,49 @@ body {
   line-height: 1;
 }
 
-.lol-avatar {
-  width: 36px; /* Tăng kích thước */
-  height: 36px;
-  border: 2px solid var(--lol-gold);
-  border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    var(--lol-bg-secondary),
-    var(--lol-bg-primary)
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Beaufort", serif;
-  font-weight: 700;
-  font-size: 12px;
-  color: var(--lol-gold);
-  cursor: pointer;
-  box-shadow: var(--lol-glow-gold);
-  transition: all 0.3s ease;
+.lol-avatar-container {
+  position: relative;
+  height: 4rem;
+  width: auto; 
+  aspect-ratio:1/1;
   flex-shrink: 0;
+  cursor: pointer;
 }
 
-.lol-avatar:hover {
-  box-shadow: 0 0 20px rgba(200, 170, 110, 0.4);
-  border-color: var(--lol-gold-light);
+/* Khung PNG nằm đè lên trên và bao phủ 100% hộp chứa */
+.lol-avatar-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 2; /* Đảm bảo luôn nằm trên avatar */
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
+}
+
+/* Ảnh avatar nằm ở phía sau */
+.lol-avatar-img {
+  position: absolute;
+  /* Giữ ảnh luôn nằm chính giữa tâm của khung */
+  top: 46%;
+  left:49%;
+  transform: translate(-50%, -50%); 
+  width: 40%;  
+  height: 40%; 
+  
+  border-radius: 50%; /* Cắt tròn hoàn hảo */
+  object-fit: cover;
+  z-index: 1; /* Nằm dưới khung */
+}
+
+/* Hiệu ứng tương tác Hover chuẩn LoL */
+
+
+.lol-avatar-container:hover .lol-avatar-frame {
+  /* Khung phát sáng rực lên khi hover */
+  filter: drop-shadow(0 0 8px rgba(252, 241, 221, 0.6)) drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
 }
 
 /* Dashboard Layout - Fix content alignment */
@@ -501,7 +530,7 @@ body {
     align-items: center;
     justify-content: space-between !important;
     padding: 0 12px !important;
-    height: 50px !important;
+    height: 3rem !important;
     margin: 0;
   }
 
@@ -511,7 +540,7 @@ body {
     transform: none;
     flex: 0 0 auto;
     border: none !important;
-    padding: 0 1rem !important;
+    padding: 0 2rem !important;
     background: transparent !important;
   }
 
@@ -527,11 +556,13 @@ body {
     gap: 0px;
   }
   .lol-currency {
-    display: flex; /* Hiện lại tiền trên mobile */
+    display: none; /* Hiện lại tiền trên mobile */
     padding-right: 0.5rem;
   }
-  .lol-avatar {
-    display: none;
+
+  .lol-avatar-container {
+    display: flex;
+    height: 3rem;
   }
 }
 
