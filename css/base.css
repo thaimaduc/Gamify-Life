@@ -47,8 +47,9 @@ body {
     color: #eaeaea;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
     line-height: 1.5;
 }
 .container { 

@@ -446,6 +446,38 @@ body {
   padding: 20px;
 }
 
+/* ===================================================
+   CƠ CHẾ ẨN/HIỆN TABS & TỐI ƯU KHUNG HIỂN THỊ
+   =================================================== */
+
+/* 1. Mặc định ẩn toàn bộ nội dung của các tab đi */
+.tab-content {
+  display: none !important;
+}
+
+/* 2. Khi tab có class .active thì mới hiển thị */
+.tab-content.active {
+  display: block !important;
+  
+  /* CỰC KỲ QUAN TRỌNG: Ép tab này chiếm toàn bộ chiều rộng của Grid (từ cột 1 đến hết),
+     tránh việc nội dung tab bị co rúm vào ô 320px của cột đầu tiên trên Desktop */
+  grid-column: 1 / -1; 
+  
+  animation: fadeInTab 0.25s ease-in-out forwards;
+}
+
+/* Hiệu ứng chuyển tab mượt mà nhẹ nhàng kiểu Hextech */
+@keyframes fadeInTab {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ===== MOBILE MENU TOGGLE & DROPDOWN ===== */
 
 /* Nút hamburger (chỉ hiện mobile) */

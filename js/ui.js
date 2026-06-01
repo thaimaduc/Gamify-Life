@@ -38,27 +38,33 @@ var UI = (function() {
         { maxLevel: Infinity, src: "images/frame/Level_500_Summoner_Icon_Border.png" } // Cấp 100 trở lên
     ];
 
-    // Xử lý chuyển tab cho LoL-style nav
-document.querySelectorAll('.lol-nav-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    // Remove active từ tất cả tabs
-    document.querySelectorAll('.lol-nav-tab').forEach(t => t.classList.remove('active'));
-    // Add active cho tab được click
-    tab.classList.add('active');
-    
-    // Ẩn tất cả content
-    document.querySelectorAll('.tab-content').forEach(content => {
-      content.classList.remove('active');
+// Xử lý chuyển tab cho LoL-style nav (Đã tối ưu đồng bộ Desktop & Mobile)
+    document.querySelectorAll('.lol-nav-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.getAttribute('data-target');
+        if (!target) return;
+
+        // Xóa class active khỏi TẤT CẢ các nút tab (cả bản desktop lẫn mobile)
+        document.querySelectorAll('.lol-nav-tab').forEach(t => t.classList.remove('active'));
+        
+        // Bật active cho tất cả các nút có cùng data-target (giúp đồng bộ cả 2 giao diện)
+        document.querySelectorAll('.lol-nav-tab[data-target="' + target + '"]').forEach(t => t.classList.add('active'));
+        
+        // Ẩn tất cả các khối nội dung tab
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.remove('active');
+        });
+        
+        // Hiện chính xác nội dung của tab vừa click
+        var targetContent = document.getElementById(target);
+        if (targetContent) {
+            targetContent.classList.add('active');
+        }
+        
+        // Re-render icons nếu dùng Lucide
+        if (window.lucide) lucide.createIcons();
+      });
     });
-    
-    // Hiện content tương ứng
-    const target = tab.getAttribute('data-target');
-    document.getElementById(target)?.classList.add('active');
-    
-    // Re-render icons nếu dùng Lucide
-    if (window.lucide) lucide.createIcons();
-  });
-});
     
     // ===== STAT CONFIG =====
     var statConfig = [

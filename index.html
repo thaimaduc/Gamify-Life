@@ -35,11 +35,17 @@
     <button class="lol-nav-tab active" data-target="tab-quests">
       <span class="tab-text">Nhiệm vụ</span>
     </button>
+    <button class="lol-nav-tab" data-target="tab-habits">
+      <span class="tab-text">Thói quen</span>
+    </button>
     <button class="lol-nav-tab" data-target="tab-achievements">
       <span class="tab-text">Thành tựu</span>
     </button>
     <button class="lol-nav-tab" data-target="tab-shop">
       <span class="tab-text">Cửa hàng</span>
+    </button>
+    <button class="lol-nav-tab" data-target="tab-inventory">
+      <span class="tab-text">Kho đồ</span>
     </button>
     <button class="lol-nav-tab" data-target="tab-settings">
       <span class="tab-text">Cài đặt</span>
@@ -66,11 +72,17 @@
   <button class="lol-nav-tab mobile-tab-item active" data-target="tab-quests">
     <span class="tab-text">Nhiệm vụ</span>
   </button>
+  <button class="lol-nav-tab mobile-tab-item" data-target="tab-habits">
+    <span class="tab-text">Thói quen</span>
+  </button>
   <button class="lol-nav-tab mobile-tab-item" data-target="tab-achievements">
     <span class="tab-text">Thành tựu</span>
   </button>
   <button class="lol-nav-tab mobile-tab-item" data-target="tab-shop">
     <span class="tab-text">Cửa hàng</span>
+  </button>
+  <button class="lol-nav-tab mobile-tab-item" data-target="tab-inventory">
+    <span class="tab-text">Kho đồ</span>
   </button>
   <button class="lol-nav-tab mobile-tab-item" data-target="tab-settings">
     <span class="tab-text">Cài đặt</span>
@@ -172,6 +184,52 @@
                     <ul id="shop-list" style="list-style: none; padding: 0;">
                         <!-- JS sẽ render item vào đây -->
                     </ul>
+                </div>
+            </section>
+
+            <!-- 🔁 TAB: THÓI QUEN -->
+            <section class="col-center tab-content" id="tab-habits">
+                <div class="quest-creation-card card-game">
+                    <h2>➕ Thiết Lập Thói Quen</h2>
+                    <form id="habit-form">
+                        <input type="text" id="habit-title" class="input-game" placeholder="Thói quen bạn muốn rèn luyện (VD: Đọc sách, Chạy bộ)..." required>
+                        
+                        <div class="quest-form-row">
+                            <select id="habit-difficulty" class="input-game" title="Độ khó">
+                                <option value="easy">Dễ (x1)</option>
+                                <option value="medium" selected>Vừa (x2)</option>
+                                <option value="hard">Khó (x3)</option>
+                            </select>
+                        </div>
+
+                        <div class="stat-toggles-container">
+                            <div class="stat-toggles-label">Chọn hệ năng lực phát triển (Có thể chọn nhiều):</div>
+                            <div class="stat-toggles" id="habit-stat-toggles">
+                                <label class="stat-toggle"><input type="checkbox" value="str" checked> <span>⚔️ STR</span></label>
+                                <label class="stat-toggle"><input type="checkbox" value="agi"> <span>🪽 AGI</span></label>
+                                <label class="stat-toggle"><input type="checkbox" value="int"> <span>🧠 INT</span></label>
+                                <label class="stat-toggle"><input type="checkbox" value="vit"> <span>❤️ VIT</span></label>
+                                <label class="stat-toggle"><input type="checkbox" value="lck"> <span>🍀 LCK</span></label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-create-quest btn-game">🔁 Tạo Thói Quen</button>
+                    </form>
+                </div>
+
+                <div class="quest-board-card card-game">
+                    <h2>🔁 Bảng Thói Quen</h2>
+                    <p style="color: #a0a0b0; font-size: 0.9rem; margin-bottom: 1.5rem;">Thói quen có thể hoàn thành nhiều lần. Hãy click + để check-in và nhận thưởng!</p>
+                    <ul id="habit-list" style="list-style: none; padding: 0;"></ul>
+                </div>
+            </section>
+
+            <!-- 🎒 TAB: KHO ĐỒ -->
+            <section class="col-center tab-content" id="tab-inventory">
+                <div class="quest-board-card card-game">
+                    <h2>🎒 Kho Đồ Cá Nhân</h2>
+                    <p style="color: #a0a0b0; font-size: 0.9rem; margin-bottom: 1.5rem;">Nơi chứa các phần thưởng bạn đã mua ở Cửa hàng. Hãy click Sử dụng để tận hưởng thành quả!</p>
+                    <ul id="inventory-list" style="list-style: none; padding: 0;"></ul>
                 </div>
             </section>
 

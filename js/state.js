@@ -29,6 +29,8 @@ var State = (function() {
         lastActive: null,
         badges: [],
         completedQuests: 0,
+        habits: [],
+        inventory: [],
         // 💡 Khởi tạo Shop mặc định
         shopItems: [
             { id: 1, name: '1 Giờ chơi Game/Giải trí', price: 500, icon: '🎮' },
@@ -103,6 +105,8 @@ var State = (function() {
             if (saved.completedQuests !== undefined) user.completedQuests = saved.completedQuests;
             // 💡 Load Shop Items (Nếu chưa có thì dùng DEFAULTS)
             if (Array.isArray(saved.shopItems)) user.shopItems = saved.shopItems.slice();
+            if (Array.isArray(saved.habits)) user.habits = saved.habits.slice();
+            if (Array.isArray(saved.inventory)) user.inventory = saved.inventory.slice();
         }
         return user;
     }
@@ -234,6 +238,78 @@ var State = (function() {
         _markSave();
     }
 
+    // ===== HỆ THỐNG THÓI QUEN (HABITS) =====
+    function getHabits() {
+        return user.habits || [];
+    }
+
+    function addHabit(title, statTypesArray, difficulty) {
+        if (!user.habits) user.habits = [];
+        var newHabit = {
+            id: Date.now() + Math.random().toString(36).substr(2, 5),
+            title: title.trim(),
+            statTypes: statTypesArray,
+            difficulty: difficulty,
+            count: 0,
+            createdAt: new Date().toISOString(),
+            lastCompleted: null
+        };
+        user.habits.push(newHabit);
+        _markSave();
+        return newHabit;
+    }
+
+    function completeHabit(habitId) {
+        if (!user.habits) return null;
+        for (var i = 0; i < user.habits.length; i++) {
+            var h = user.habits[i];
+            if (h.id === habitId) {
+                h.count = (h.count || 0) + 1;
+                h.lastCompleted = new Date().toISOString();
+                _markSave();
+                return h;
+            }
+        }
+        return null;
+    }
+
+    function removeHabit(habitId) {
+        if (!user.habits) return false;
+        var lenBefore = user.habits.length;
+        user.habits = user.habits.filter(function(h) { return h.id !== habitId; });
+        var success = user.habits.length < lenBefore;
+        if (success) _markSave();
+        return success;
+    }
+
+    // ===== HỆ THỐNG KHO ĐỒ (INVENTORY) =====
+    function getInventory() {
+        return user.inventory || [];
+    }
+
+    function addToInventory(name, price, icon) {
+        if (!user.inventory) user.inventory = [];
+        var newItem = {
+            id: Date.now() + Math.random().toString(36).substr(2, 5),
+            name: name,
+            price: price,
+            icon: icon || '🎁',
+            purchasedAt: new Date().toISOString()
+        };
+        user.inventory.push(newItem);
+        _markSave();
+        return newItem;
+    }
+
+    function removeFromInventory(id) {
+        if (!user.inventory) return false;
+        var lenBefore = user.inventory.length;
+        user.inventory = user.inventory.filter(function(item) { return item.id !== id; });
+        var success = user.inventory.length < lenBefore;
+        if (success) _markSave();
+        return success;
+    }
+
     // ===== HỆ THỐNG BACKUP DỮ LIỆU =====
     function exportData() {
         return JSON.stringify(getUser());
@@ -278,6 +354,8 @@ var State = (function() {
         addTotalExp: addTotalExp, addStatExp: addStatExp, spendAllocPoint: spendAllocPoint,
         addGold: addGold, spendGold: spendGold, 
         getShopItems: getShopItems, addShopItem: addShopItem, removeShopItem: removeShopItem, // 💡 EXPORT SHOP API
+        getHabits: getHabits, addHabit: addHabit, completeHabit: completeHabit, removeHabit: removeHabit, // 💡 HABITS API
+        getInventory: getInventory, addToInventory: addToInventory, removeFromInventory: removeFromInventory, // 💡 INVENTORY API
         exportData: exportData, importData: importData,
         getTotalExpThreshold: getTotalExpThreshold, getTotalExpProgress: getTotalExpProgress,
         getStatExpThreshold: getStatExpThreshold, getStatExpProgress: getStatExpProgress,
